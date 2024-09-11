@@ -22,6 +22,7 @@ def firefox_instance():
         options = Options()
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--headless')
         service = Service(executable_path="/snap/bin/geckodriver", log_output=os.devnull)
         driver = webdriver.Firefox(options=options, service=service)
     else:
