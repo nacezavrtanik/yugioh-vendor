@@ -1,5 +1,6 @@
 import requests
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 from firefox import firefox_instance
 
 RABBIT = (
@@ -38,5 +39,11 @@ with firefox_instance() as firefox:
         price_xpath = ".//div[@class='col-offer col-auto']//span"
         price = element.find_element(By.XPATH, price_xpath).text
 
-        attrs = seller, condition, language, price
+        comment_xpath = ".//div[@class='product-comments me-1 col']"
+        try:
+            comment = element.find_element(By.XPATH, comment_xpath).text
+        except NoSuchElementException:
+            comment = ""
+
+        attrs = seller, condition, language, price, comment
         print(attrs)
