@@ -20,11 +20,14 @@ BREAKER = (
 )
 
 CARD = BREAKER
+offers = []
 
-entry_xpath = "//div[@class='row g-0 article-row']"
 with firefox_instance() as firefox:
     firefox.get(CARD)
-    elements = firefox.find_elements(By.XPATH, entry_xpath)
+
+    offer_xpath = "//div[@class='row g-0 article-row']"
+    elements = firefox.find_elements(By.XPATH, offer_xpath)
+
     for element in elements:
         seller_xpath = ".//span[@class='seller-name d-flex']/span[3]"
         seller = element.find_element(By.XPATH, seller_xpath).text
@@ -46,4 +49,5 @@ with firefox_instance() as firefox:
             comment = ""
 
         attrs = seller, condition, language, price, comment
+        offers.append(attrs)
         print(attrs)
