@@ -39,6 +39,14 @@ with firefox_instance() as firefox:
         language_element = element.find_element(By.XPATH, language_xpath)
         language = language_element.get_attribute("aria-label")
 
+        edition_xpath = ".//div[@class='product-attributes col']/span[@class='icon st_SpecialIcon mr-1']"
+        try:
+            element.find_element(By.XPATH, edition_xpath)
+        except NoSuchElementException:
+            edition = "Unlimited"
+        else:
+            edition = "1st Edition"
+
         price_xpath = ".//div[@class='col-offer col-auto']//span"
         price = element.find_element(By.XPATH, price_xpath).text
 
@@ -48,6 +56,6 @@ with firefox_instance() as firefox:
         except NoSuchElementException:
             comment = ""
 
-        attrs = seller, condition, language, price, comment
+        attrs = seller, condition, language, edition, price, comment
         offers.append(attrs)
         print(attrs)
