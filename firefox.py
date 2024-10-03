@@ -8,17 +8,20 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
 
-def system_is_ubuntu_22_04():
+def system_is_ubuntu_22_04_or_later():
     if platform.system() == "Linux":
         distro_data = platform.freedesktop_os_release()
-        if distro_data.get("ID") == "ubuntu" and distro_data.get("VERSION_ID") == "22.04":
+        if (
+            distro_data.get("ID") == "ubuntu"
+            and distro_data.get("VERSION_ID") >= "22.04"
+        ):
             return True
     return False
 
 
 @contextlib.contextmanager
 def firefox_instance():
-    if system_is_ubuntu_22_04():
+    if system_is_ubuntu_22_04_or_later():
         options = Options()
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
