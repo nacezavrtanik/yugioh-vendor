@@ -2,7 +2,7 @@
 from collections.abc import Sequence
 import os
 import pandas as pd
-from cards import Card
+from card import Card
 
 
 class Binder(Sequence):
