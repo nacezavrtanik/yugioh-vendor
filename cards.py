@@ -1,7 +1,5 @@
 
 from collections import namedtuple
-import pandas as pd
-from config import EXCEL
 
 
 class Card(namedtuple("Card", ["name", "set", "rarity", "language", "condition", "edition"])):
@@ -53,9 +51,3 @@ def read_cards_from_excel(filepath):
     for _, row in excel.iterrows():
         card = Card.from_series(row)
         yield card
-
-
-class Binder(list):
-    @classmethod
-    def from_excel(cls, filepath):
-        return cls(Card.from_series(row) for _, row in pd.read_excel(filepath).iterrows())
