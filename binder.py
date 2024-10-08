@@ -35,3 +35,6 @@ class Binder(Sequence):
 
     def __str__(self):
         return self.name
+
+    def to_excel(self, filepath):
+        """Save cards in binder to excel, and add columns for offers."""

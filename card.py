@@ -1,14 +1,28 @@
 
-from collections import namedtuple
-
-
-class Card(namedtuple("Card", ["name", "set", "rarity", "language", "condition", "edition"])):
-    __slots__ = ()
+class Card:
     SEARCH_URL_TEMPLATE = (
         "https://www.cardmarket.com/en/YuGiOh/Products/Search"
         "?searchString={search_term}"
         "&site={site_number}"
     )
+
+    def __init__(
+        self,
+        name,
+        set_,
+        rarity,
+        language,
+        condition,
+        edition,
+        offers=None,
+    ):
+        self.name = name
+        self.set_ = set_
+        self.rarity = rarity
+        self.language = language
+        self.condition = condition
+        self.edition = edition
+        self.offers = offers
 
     @classmethod
     def from_series(cls, series):
@@ -25,7 +39,7 @@ class Card(namedtuple("Card", ["name", "set", "rarity", "language", "condition",
                 raise ValueError(f"column {column} not in index")
         instance = cls(
             name=series["Card name"],
-            set=series["Set"],
+            set_=series["Set"],
             rarity=series["Rarity"],
             language=series["Language"],
             condition=series["Condition"],
@@ -37,17 +51,10 @@ class Card(namedtuple("Card", ["name", "set", "rarity", "language", "condition",
         return self.SEARCH_URL_TEMPLATE.format(
             search_term=self.name.replace(" ", "+"),
             site_number=site_number,
-            )
+        )
 
     def __repr__(self):
         return f"Card('{self.name}', '{self.set}', '{self.rarity}', '{self.language}', '{self.condition}', '{self.edition}')"
 
     def __str__(self):
         return self.name
-
-
-def read_cards_from_excel(filepath):
-    excel = pd.read_excel(filepath)
-    for _, row in excel.iterrows():
-        card = Card.from_series(row)
-        yield card
