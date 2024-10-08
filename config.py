@@ -1,3 +1,3 @@
 
-EXCEL = "./excels/Zvezek1.xlsx"
+EXCEL = "./excels/testing.xlsx"
 
