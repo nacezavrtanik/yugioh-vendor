@@ -36,7 +36,7 @@ class Single:
 
     @property
     def set_requires_language_code(self):
-        return self.set in self.language_code_sets
+        return self.set in self.LANGUAGE_CODE_SETS
 
     @property
     def has_attributes_required_for_evaluation(self):
