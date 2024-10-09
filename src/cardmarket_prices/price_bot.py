@@ -115,14 +115,3 @@ class PriceBot:
             offers.append(attrs)
             print(attrs)
             return offers
-
-
-if __name__ == "__main__":
-
-    from firefox import firefox_instance
-    import config
-
-    binder = Binder.from_excel(config.EXCEL)
-    singlemarket_bot = PriceBot(firefox_instance)
-    singlemarket_bot.update_binder_with_offers(binder)
-
