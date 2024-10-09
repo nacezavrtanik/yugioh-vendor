@@ -3,7 +3,8 @@ import requests
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from firefox import firefox_instance
-from cards import read_cards_from_excel, Card
+from card import Card
+from binder import Binder
 import config
 
 
@@ -20,7 +21,7 @@ def open_article_website_for_card(driver, card):
 
         for version in versions:
             set_ = version.find_element(By.XPATH, set_xpath).text
-            if set_ == card.set:
+            if set_ == card.set_:
                 name_element = version.find_element(By.XPATH, name_xpath)
                 name = name_element.text
                 if name == card.name:
@@ -75,7 +76,8 @@ def get_prices_for_card(driver, card):
         return offers
 
 
-with firefox_instance() as firefox:
-    for card in read_cards_from_excel(config.EXCEL):
-        open_article_website_for_card(firefox, card)
-        prices = get_prices_for_card(firefox, card)
+if __name__ == "__main__":
+    with firefox_instance() as firefox:
+        for card in Binder.from_excel(config.EXCEL):
+            open_article_website_for_card(firefox, card)
+            prices = get_prices_for_card(firefox, card)
