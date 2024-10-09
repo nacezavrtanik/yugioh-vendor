@@ -61,7 +61,7 @@ class CardmarketBot:
 
             for version in versions:
                 set_ = version.find_element(By.XPATH, set_xpath).text
-                if set_ == card.set_:
+                if set_ == card.set:
                     name_element = version.find_element(By.XPATH, name_xpath)
                     name = name_element.text
                     if name == card.name:

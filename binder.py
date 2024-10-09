@@ -21,7 +21,7 @@ class Binder(list):
     @classmethod
     def from_excel(cls, filepath, name=None):
         cards = (
-            Card.from_series(row)
+            Card(**row.to_dict())
             for _, row in pd.read_excel(filepath).iterrows()
         )
         return cls(cards)

@@ -1,48 +1,57 @@
 
 class Card:
+    LANGUAGE_CODE_SETS = [
+        "LOB",
+        "MRD",
+        "MRL",
+        "SRL",
+    ]
+
     def __init__(
         self,
         name,
-        set_,
-        rarity,
-        language,
-        condition,
-        edition,
+        *,
+        set=None,
+        rarity=None,
+        language=None,
+        condition=None,
+        edition=None,
+        version=None,
+        article=None,
         offers=None,
     ):
         self.name = name
-        self.set_ = set_
+        self.set = set
         self.rarity = rarity
         self.language = language
         self.condition = condition
         self.edition = edition
+        self.version = version
+        self.article = article
         self.offers = offers
 
-    @classmethod
-    def from_series(cls, series):
-        required_columns = [
-            "Card name",
-            "Set",
-            "Rarity",
-            "Language",
-            "Condition",
-            "Edition",
+    @property
+    def set_is_duelist_league(self):
+        return self.set is not None and self.set.startswith("DL")
+
+    @property
+    def set_requires_language_code(self):
+        return self.set in self.language_code_sets
+
+    @property
+    def has_attributes_required_for_evaluation(self):
+        if self.set is None:
+            return False
+
+        if self.version is None and (
+            self.set_is_duelist_league or self.set_requires_language_code
+        ):
+            return False
+
+        other_required_attrs = [
+            self.rarity,
+            self.language,
+            self.condition,
+            self.edition,
         ]
-        for column in required_columns:
-            if column not in series.index:
-                raise ValueError(f"column {column} not in index")
-        instance = cls(
-            name=series["Card name"],
-            set_=series["Set"],
-            rarity=series["Rarity"],
-            language=series["Language"],
-            condition=series["Condition"],
-            edition=series["Edition"],
-            )
-        return instance
-
-    def __repr__(self):
-        return f"Card('{self.name}', '{self.set_}', '{self.rarity}', '{self.language}', '{self.condition}', '{self.edition}')"
-
-    def __str__(self):
-        return self.name
+        return not any(attr is None for attr in other_required_attrs)
