@@ -1,4 +1,6 @@
 __pycache__/
 *.swp
 excels/
+src/cardmarket_prices/firefox.py
+dev.py
 
