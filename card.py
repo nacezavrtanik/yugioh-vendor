@@ -1,11 +1,5 @@
 
 class Card:
-    SEARCH_URL_TEMPLATE = (
-        "https://www.cardmarket.com/en/YuGiOh/Products/Search"
-        "?searchString={search_term}"
-        "&site={site_number}"
-    )
-
     def __init__(
         self,
         name,
@@ -46,12 +40,6 @@ class Card:
             edition=series["Edition"],
             )
         return instance
-
-    def get_search_url(self, site_number=1):
-        return self.SEARCH_URL_TEMPLATE.format(
-            search_term=self.name.replace(" ", "+"),
-            site_number=site_number,
-        )
 
     def __repr__(self):
         return f"Card('{self.name}', '{self.set_}', '{self.rarity}', '{self.language}', '{self.condition}', '{self.edition}')"

@@ -6,6 +6,12 @@ from binder import Binder
 
 
 class CardmarketBot:
+    SEARCH_URL_TEMPLATE = (
+        "https://www.cardmarket.com/en/YuGiOh/Products/Search"
+        "?searchString={search_term}"
+        "&site={site_number}"
+    )
+
     def __init__(
         self,
         driver_context_manager,
@@ -36,6 +42,12 @@ class CardmarketBot:
                 self.open_article_website_for_card(driver, card)
                 prices = self.get_prices_for_card(driver, card)
 
+    def get_search_url_for_card(self, card, site_number=1):
+        return self.SEARCH_URL_TEMPLATE.format(
+            search_term=card.name.replace(" ", "+"),
+            site_number=site_number,
+        )
+
     def open_article_website_for_card(self, driver, card):
         page_count = count(1)
         versions_xpath = "//div[@class='table-body']/div"
@@ -43,7 +55,7 @@ class CardmarketBot:
         name_xpath = "./div[4]//a[1]"
 
         while True:
-            driver.get(card.get_search_url(next(page_count)))
+            driver.get(self.get_search_url_for_card(card, next(page_count)))
             versions = driver.find_elements(By.XPATH, versions_xpath)
             is_last_page = len(versions) < 30
 
