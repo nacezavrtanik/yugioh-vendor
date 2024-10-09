@@ -54,7 +54,7 @@ class Card:
         )
 
     def __repr__(self):
-        return f"Card('{self.name}', '{self.set}', '{self.rarity}', '{self.language}', '{self.condition}', '{self.edition}')"
+        return f"Card('{self.name}', '{self.set_}', '{self.rarity}', '{self.language}', '{self.condition}', '{self.edition}')"
 
     def __str__(self):
         return self.name

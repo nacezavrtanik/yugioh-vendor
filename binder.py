@@ -1,40 +1,30 @@
 
-from collections.abc import Sequence
-import os
 import pandas as pd
 from card import Card
 
 
-class Binder(Sequence):
-    def __init__(self, name, cards):
-        self.name = name
-        self.cards = cards
+def _validate(iterable):
+    for item in iterable:
+        if isinstance(item, Card):
+            yield item
+        else:
+            raise TypeError(
+                "direct instantiation of Binder requires "
+                "iterable of Card objects"
+            )
+
+
+class Binder(list):
+    def __init__(self, iterable):
+        super().__init__(_validate(iterable))
 
     @classmethod
     def from_excel(cls, filepath, name=None):
-        if name is None:
-            basename = os.path.basename(filepath)
-            name = os.path.splitext(basename)[0]
-        cards = [
+        cards = (
             Card.from_series(row)
             for _, row in pd.read_excel(filepath).iterrows()
-        ]
-        return cls(name, cards)
-
-    def __len__(self):
-        return len(self.cards)
-
-    def __getitem__(self, index):
-        return self.cards[index]
-
-    def __repr__(self):
-        cards_repr = self.cards
-        if len(self) > 3:
-            cards_repr = f"[{repr(self.cards[0])}, ..., {repr(self.cards[-1])}]"
-        return f"Binder(name='{self.name}', cards={cards_repr})"
-
-    def __str__(self):
-        return self.name
+        )
+        return cls(cards)
 
     def to_excel(self, filepath):
         """Save cards in binder to excel, and add columns for offers."""
