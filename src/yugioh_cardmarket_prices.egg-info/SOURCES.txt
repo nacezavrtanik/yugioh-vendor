@@ -1,0 +1,12 @@
+pyproject.toml
+src/cardmarket_prices/binder.py
+src/cardmarket_prices/card.py
+src/cardmarket_prices/cardmarket_bot.py
+src/cardmarket_prices/config.py
+src/cardmarket_prices/exceptions.py
+src/cardmarket_prices/firefox.py
+src/yugioh_cardmarket_prices.egg-info/PKG-INFO
+src/yugioh_cardmarket_prices.egg-info/SOURCES.txt
+src/yugioh_cardmarket_prices.egg-info/dependency_links.txt
+src/yugioh_cardmarket_prices.egg-info/requires.txt
+src/yugioh_cardmarket_prices.egg-info/top_level.txt

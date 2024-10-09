@@ -1,0 +1,15 @@
+
+[build-system]
+requires = ["setuptools >= 69.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yugioh-cardmarket-prices"
+version = "0.0.1"
+dependencies = [
+    "selenium",
+    "pandas",
+    "openpyxl",
+]
+requires-python = ">= 3.12"
+
