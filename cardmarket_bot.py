@@ -3,6 +3,7 @@ from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from binder import Binder
+from exceptions import ArticleNotFoundError
 
 
 class CardmarketBot:
@@ -39,41 +40,42 @@ class CardmarketBot:
         """Add n lowest offers to each card in binder."""
         with self.driver_context_manager() as driver:
             for card in binder:
-                self.open_article_website_for_card(driver, card)
+                self._set_article_attribute_for_card(driver, card)
                 prices = self.get_prices_for_card(driver, card)
 
-    def get_search_url_for_card(self, card, site_number=1):
+    def _get_search_url_for_card(self, card, site_number=1):
         return self.SEARCH_URL_TEMPLATE.format(
             search_term=card.name.replace(" ", "+"),
             site_number=site_number,
         )
 
-    def open_article_website_for_card(self, driver, card):
+    def _set_article_attribute_for_card(self, driver, card):
         page_count = count(1)
-        versions_xpath = "//div[@class='table-body']/div"
+        results_xpath = "//div[@class='table-body']/div"
         set_xpath = "./div[3]"
         name_xpath = "./div[4]//a[1]"
+        results_per_full_search_page = 30
 
         while True:
-            driver.get(self.get_search_url_for_card(card, next(page_count)))
-            versions = driver.find_elements(By.XPATH, versions_xpath)
-            is_last_page = len(versions) < 30
+            driver.get(self._get_search_url_for_card(card, next(page_count)))
+            results = driver.find_elements(By.XPATH, results_xpath)
+            is_last_page = len(results) < results_per_full_search_page
 
-            for version in versions:
-                set_ = version.find_element(By.XPATH, set_xpath).text
+            for result in results:
+                set_ = result.find_element(By.XPATH, set_xpath).text
                 if set_ == card.set:
-                    name_element = version.find_element(By.XPATH, name_xpath)
+                    name_element = result.find_element(By.XPATH, name_xpath)
                     name = name_element.text
                     if name == card.name:
                         print("!!!", set_, card.name)
-                        print("FOUND")
-                        print(name_element.get_attribute("href"))
+                        print("FOUND", name_element.get_attribute("href"))
+                        card.article = name_element.get_attribute("href")
                         return
-                    print(" * ", set_, name)
-
-            if is_last_page:
-                print("NOT FOUND")
-                break
+                    else:
+                        print(" * ", set_, name)
+            else:
+                if is_last_page:
+                    raise ArticleNotFoundError("last results page reached")
 
     def get_prices_for_card(self, driver, card):
         offers = []
