@@ -1,16 +1,16 @@
 
 import pandas as pd
-from card import Card
+from cardmarket_prices.single import Single
 
 
 def _validate(iterable):
     for item in iterable:
-        if isinstance(item, Card):
+        if isinstance(item, Single):
             yield item
         else:
             raise TypeError(
                 "direct instantiation of Binder requires "
-                "iterable of Card objects"
+                "iterable of Single objects"
             )
 
 
@@ -20,11 +20,11 @@ class Binder(list):
 
     @classmethod
     def from_excel(cls, filepath, name=None):
-        cards = (
-            Card(**row.to_dict())
+        singles = (
+            Single(**row.to_dict())
             for _, row in pd.read_excel(filepath).iterrows()
         )
-        return cls(cards)
+        return cls(singles)
 
     def to_excel(self, filepath):
-        """Save cards in binder to excel, and add columns for offers."""
+        """Save singles in binder to excel, and add columns for offers."""

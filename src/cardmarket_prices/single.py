@@ -1,5 +1,5 @@
 
-class Card:
+class Single:
     LANGUAGE_CODE_SETS = [
         "LOB",
         "MRD",
