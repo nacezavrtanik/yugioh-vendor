@@ -8,7 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
-from marketwatch import PriceBot, Binder
+from marketwatch import PriceBot, Single, Binder
 import marketwatch.config as cfg
 
 
@@ -47,6 +47,21 @@ def firefox():
 @pytest.fixture()
 def price_bot():
     return PriceBot(firefox)
+
+
+@pytest.fixture()
+def tatsunoko():
+    return Single(
+        "Tatsunoko",
+        set="CORE",
+        rarity="ScR",
+        language="EN",
+        condition="NM",
+        edition=None,
+        version=None,
+        altered=False,
+        signed=False,
+    )
 
 
 @pytest.fixture()
