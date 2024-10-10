@@ -65,5 +65,20 @@ def tatsunoko():
 
 
 @pytest.fixture()
+def dark_magician():
+    return Single(
+        "Dark Magician",
+        set="LOB",
+        rarity="SR",
+        language="EN",
+        condition="NM",
+        edition="1st Edition",
+        version=None,
+        altered=False,
+        signed=False,
+    )
+
+
+@pytest.fixture()
 def binder():
     return Binder.from_excel(cfg.EXCEL)

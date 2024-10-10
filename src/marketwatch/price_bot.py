@@ -23,6 +23,12 @@ class PriceBot:
         self.ignore_bad_sellers = ignore_bad_sellers
         self.manual_lookup_threshold = manual_lookup_threshold
 
+    def _get_search_url_for_single(self, single, site_number=1):
+        return self.SEARCH_URL_TEMPLATE.format(
+            search_term=single.name.replace(" ", "+"),
+            site_number=site_number,
+        )
+
     def evaluate_single(self, single):
         """Return lowest price as floating point number."""
 
@@ -38,12 +44,6 @@ class PriceBot:
             for single in binder:
                 self._set_article_attribute_for_single(driver, single)
                 prices = self.get_prices_for_single(driver, single)
-
-    def _get_search_url_for_single(self, single, site_number=1):
-        return self.SEARCH_URL_TEMPLATE.format(
-            search_term=single.name.replace(" ", "+"),
-            site_number=site_number,
-        )
 
     def _set_article_attribute_for_single(self, driver, single):
         page_count = count(1)
