@@ -1,6 +1,6 @@
 
 import pytest
-from cardmarket_prices import Single
+from marketwatch import Single
 
 
 @pytest.fixture()

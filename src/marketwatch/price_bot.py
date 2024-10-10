@@ -2,8 +2,8 @@
 from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from cardmarket_prices.binder import Binder
-from cardmarket_prices.exceptions import ArticleNotFoundError
+from marketwatch.binder import Binder
+from marketwatch.exceptions import ArticleNotFoundError
 
 
 class PriceBot:

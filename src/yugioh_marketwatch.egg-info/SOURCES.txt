@@ -1,0 +1,14 @@
+pyproject.toml
+src/marketwatch/__init__.py
+src/marketwatch/binder.py
+src/marketwatch/config.py
+src/marketwatch/exceptions.py
+src/marketwatch/firefox.py
+src/marketwatch/price_bot.py
+src/marketwatch/single.py
+src/yugioh_marketwatch.egg-info/PKG-INFO
+src/yugioh_marketwatch.egg-info/SOURCES.txt
+src/yugioh_marketwatch.egg-info/dependency_links.txt
+src/yugioh_marketwatch.egg-info/requires.txt
+src/yugioh_marketwatch.egg-info/top_level.txt
+tests/test_single.py

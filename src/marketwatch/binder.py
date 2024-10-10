@@ -1,6 +1,6 @@
 
 import pandas as pd
-from cardmarket_prices.single import Single
+from marketwatch.single import Single
 
 
 def _validate(iterable):
