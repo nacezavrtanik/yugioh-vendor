@@ -29,22 +29,6 @@ class PriceBot:
             site_number=site_number,
         )
 
-    def evaluate_single(self, single):
-        """Return lowest price as floating point number."""
-
-    def evaluate_binder(self, binder):
-        """Return lowest price total as floating point number."""
-
-    def update_single_with_offers(self, single, n_offers=3):
-        """Add n lowest offers to single."""
-
-    def update_binder_with_offers(self, binder, n_offers=3):
-        """Add n lowest offers to each single in binder."""
-        with self.driver_context_manager() as driver:
-            for single in binder:
-                self._set_article_attribute_for_single(driver, single)
-                prices = self.get_prices_for_single(driver, single)
-
     def _set_article_attribute_for_single(self, driver, single):
         page_count = count(1)
         results_xpath = "//div[@class='table-body']/div"
@@ -72,6 +56,22 @@ class PriceBot:
             else:
                 if is_last_page:
                     raise ArticleNotFoundError("last results page reached")
+
+    def evaluate_single(self, single):
+        """Return lowest price as floating point number."""
+
+    def evaluate_binder(self, binder):
+        """Return lowest price total as floating point number."""
+
+    def update_single_with_offers(self, single, n_offers=3):
+        """Add n lowest offers to single."""
+
+    def update_binder_with_offers(self, binder, n_offers=3):
+        """Add n lowest offers to each single in binder."""
+        with self.driver_context_manager() as driver:
+            for single in binder:
+                self._set_article_attribute_for_single(driver, single)
+                prices = self.get_prices_for_single(driver, single)
 
     def get_prices_for_single(self, driver, single):
         offers = []

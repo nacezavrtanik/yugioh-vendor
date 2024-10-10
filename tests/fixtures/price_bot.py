@@ -45,6 +45,11 @@ def firefox():
 
 
 @pytest.fixture()
+def firefox_driver():
+    return firefox
+
+
+@pytest.fixture()
 def price_bot():
     return PriceBot(firefox)
 
@@ -69,7 +74,7 @@ def dark_magician():
     return Single(
         "Dark Magician",
         set="LOB",
-        rarity="SR",
+        rarity="UR",
         language="EN",
         condition="NM",
         edition="1st Edition",
