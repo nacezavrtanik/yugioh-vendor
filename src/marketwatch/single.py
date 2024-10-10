@@ -17,6 +17,8 @@ class Single:
         condition=None,
         edition=None,
         version=None,
+        signed=False,
+        altered=False,
         article=None,
         offers=None,
     ):
@@ -27,6 +29,8 @@ class Single:
         self.condition = condition
         self.edition = edition
         self.version = version
+        self.signed = signed,
+        self.altered = altered,
         self.article = article
         self.offers = offers
 

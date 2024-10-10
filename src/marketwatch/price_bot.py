@@ -16,14 +16,10 @@ class PriceBot:
     def __init__(
         self,
         driver_context_manager,
-        ignore_signed_singles=True,
-        ignore_altered_singles=True,
         ignore_bad_sellers=True,
         manual_lookup_threshold=None,
     ):
         self.driver_context_manager = driver_context_manager
-        self.ignore_signed_singles = ignore_signed_singles
-        self.ignore_altered_singles = ignore_altered_singles
         self.ignore_bad_sellers = ignore_bad_sellers
         self.manual_lookup_threshold = manual_lookup_threshold
 
