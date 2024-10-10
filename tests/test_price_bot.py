@@ -18,6 +18,26 @@ def test_get_search_url_for_single_site_number_3(price_bot, lob_dark_magician):
     ) == expected
 
 
+def test_get_single_name_for_version_only_one_version(
+    price_bot, core_tatsunoko
+):
+    expected = "Tatsunoko"
+    assert price_bot._get_single_name_for_version(core_tatsunoko) == expected
+
+
+def test_get_single_name_for_version_duelist_league(price_bot, dl_krebons):
+    expected = "Krebons (V.2 - Rare)"
+    assert price_bot._get_single_name_for_version(dl_krebons) == expected
+
+
+@pytest.mark.skip("cannot implement correctly until I understand the logic")
+def test_get_single_name_for_version_with_language_code(
+    price_bot, lob_dark_magician
+):
+    expected = "Dark Magician (V.4 - Ultra Rare)"
+    assert price_bot._get_single_name_for_version(lob_dark_magician) == expected
+
+
 def test_set_article_attribute_for_single_only_one_version(
     firefox_driver, price_bot, core_tatsunoko
 ):
@@ -27,7 +47,6 @@ def test_set_article_attribute_for_single_only_one_version(
     assert core_tatsunoko.article == expected
 
 
-@pytest.mark.skip("figure out how to store version info")
 def test_set_article_attribute_for_single_duelist_league(
     firefox_driver, price_bot, dl_krebons
 ):

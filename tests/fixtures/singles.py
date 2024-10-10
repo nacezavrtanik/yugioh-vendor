@@ -10,7 +10,7 @@ def mrd_mirror_force():
 
 @pytest.fixture()
 def dl_krebons():
-    return Single("Krebons", set="DL09")
+    return Single("Krebons", set="DL09", version="green")
 
 
 @pytest.fixture()
@@ -37,7 +37,7 @@ def lob_dark_magician():
         language="EN",
         condition="NM",
         edition="1st Edition",
-        version=None,
+        version="EN",
         altered=False,
         signed=False,
     )

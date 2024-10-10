@@ -12,6 +12,12 @@ class PriceBot:
         "?searchString={search_term}"
         "&site={site_number}"
     )
+    DUELIST_LEAGUE_VERSION_MAPPING = {
+        "blue": 1,
+        "green": 2,
+        "gold": 3,
+        "silver": 4,
+    }
 
     def __init__(
         self,
@@ -28,6 +34,19 @@ class PriceBot:
             search_term=single.name.replace(" ", "+"),
             site_number=site_number,
         )
+
+    def _get_single_name_for_version(self, single):
+        if single.set_is_duelist_league:
+            number = self.DUELIST_LEAGUE_VERSION_MAPPING.get(single.version)
+            assert number
+            suffix = f" (V.{number} - Rare)"
+            name = single.name + suffix
+        elif single.set_requires_language_code:
+            assert single.version
+        else:
+            name = single.name
+        return name
+
 
     def _set_article_attribute_for_single(self, driver, single):
         page_count = count(1)
@@ -46,8 +65,9 @@ class PriceBot:
                 if set_ == single.set:
                     name_element = result.find_element(By.XPATH, name_xpath)
                     name = name_element.text
-                    if name == single.name:
-                        print("!!!", set_, single.name)
+                    name_for_version = self._get_single_name_for_version(single)
+                    if name == name_for_version:
+                        print("!!!", set_, name)
                         print("FOUND", name_element.get_attribute("href"))
                         single.article = name_element.get_attribute("href")
                         return
