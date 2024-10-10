@@ -1,16 +1,7 @@
 
 import pytest
+from fixtures.single import mrd_mirror_force, dl_krebons
 from marketwatch import Single
-
-
-@pytest.fixture()
-def mrd_mirror_force():
-    return Single("Mirror Force", set="MRD")
-
-
-@pytest.fixture()
-def dl_krebons():
-    return Single("Krebons", set="DL09")
 
 
 def test_instantiation_succeeds_for_only_keyword_args():
