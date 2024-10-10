@@ -55,35 +55,5 @@ def price_bot():
 
 
 @pytest.fixture()
-def tatsunoko():
-    return Single(
-        "Tatsunoko",
-        set="CORE",
-        rarity="ScR",
-        language="EN",
-        condition="NM",
-        edition=None,
-        version=None,
-        altered=False,
-        signed=False,
-    )
-
-
-@pytest.fixture()
-def dark_magician():
-    return Single(
-        "Dark Magician",
-        set="LOB",
-        rarity="UR",
-        language="EN",
-        condition="NM",
-        edition="1st Edition",
-        version=None,
-        altered=False,
-        signed=False,
-    )
-
-
-@pytest.fixture()
 def binder():
     return Binder.from_excel(cfg.EXCEL)

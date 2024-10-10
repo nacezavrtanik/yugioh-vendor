@@ -1,6 +1,6 @@
 
 import pytest
-from fixtures.single import mrd_mirror_force, dl_krebons
+from fixtures.singles import mrd_mirror_force, dl_krebons
 from marketwatch import Single
 
 
