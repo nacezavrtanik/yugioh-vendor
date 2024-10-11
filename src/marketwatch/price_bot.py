@@ -3,6 +3,7 @@ from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from marketwatch.article import Article
+from marketwatch.price import Price
 from marketwatch.binder import Binder
 from marketwatch.exceptions import ProductPageNotFoundError
 
@@ -80,7 +81,7 @@ class PriceBot:
 
     def _set_articles_attribute_for_single(self, driver, single, n_articles=3):
         """Add n lowest articles to single."""
-        driver.get(single.url)
+        driver.get(single.filtered_url)
 
         articles = []
         article_xpath = "//div[@class='row g-0 article-row']"
@@ -90,6 +91,7 @@ class PriceBot:
             location_xpath = ".//span[@class='icon d-flex has-content-centered me-1']"
             location_element = element.find_element(By.XPATH, location_xpath)
             location = location_element.get_attribute("aria-label")
+            location = location.removeprefix("Item location: ")
 
             seller_xpath = ".//span[@class='seller-name d-flex']/span[3]"
             seller = element.find_element(By.XPATH, seller_xpath).text
@@ -101,13 +103,18 @@ class PriceBot:
                 comment = ""
 
             price_xpath = ".//div[@class='col-offer col-auto']//span"
-            price = element.find_element(By.XPATH, price_xpath).text
+            price_element = element.find_element(By.XPATH, price_xpath)
+            price_string = price_element.text.removesuffix(" €").replace(",", ".")
+            price_float = float(price_string)
+            price = Price(value=price_float, unit="EUR")
 
             quantity_xpath = "./div[3]/div[2]"
-            quantity = element.find_element(By.XPATH, quantity_xpath).text
+            quantity_element = element.find_element(By.XPATH, quantity_xpath)
+            quantity = int(quantity_element.text)
 
             article = Article(location, seller, comment, price, quantity)
             articles.append(article)
+            print(article)
         single.articles = articles
 
     def update_binder_with_articles(self, binder, n_articles=3):
