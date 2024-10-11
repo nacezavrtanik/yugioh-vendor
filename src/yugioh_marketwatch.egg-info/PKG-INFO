@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: yugioh-marketwatch
-Version: 0.0.1
-Requires-Python: >=3.12
-Requires-Dist: selenium
-Requires-Dist: pandas
-Requires-Dist: openpyxl
