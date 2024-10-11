@@ -87,7 +87,7 @@ class PriceBot:
         article_xpath = "//div[@class='row g-0 article-row']"
         elements = driver.find_elements(By.XPATH, article_xpath)
 
-        for element in elements:
+        for element in elements[:n_articles]:
             location_xpath = ".//span[@class='icon d-flex has-content-centered me-1']"
             location_element = element.find_element(By.XPATH, location_xpath)
             location = location_element.get_attribute("aria-label")
