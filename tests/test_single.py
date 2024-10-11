@@ -16,10 +16,10 @@ def test_instantiation_succeeds_for_only_keyword_args():
     )
 
 
-def test_instantiation_succeeds_for_positional_name_and_keyword_args():
+def test_instantiation_succeeds_for_positional_name_set_and_keyword_args():
     single = Single(
         "Dark Magician",
-        set="SDY",
+        "SDY",
         rarity="UR",
         language="EN",
         condition="NM",
@@ -28,12 +28,12 @@ def test_instantiation_succeeds_for_positional_name_and_keyword_args():
     )
 
 
-def test_instatiation_fails_for_positional_name_and_positional_args():
+def test_instatiation_fails_for_positional_name_set_and_positional_args():
     with pytest.raises(TypeError):
         single = Single(
             "Dark Magician",
             "SDY",
-            rarity="UR",
+            "UR",
             language="EN",
             condition="NM",
             edition="1st Edition",

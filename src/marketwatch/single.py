@@ -10,8 +10,8 @@ class Single:
     def __init__(
         self,
         name,
+        set,
         *,
-        set=None,
         rarity=None,
         language=None,
         condition=None,
