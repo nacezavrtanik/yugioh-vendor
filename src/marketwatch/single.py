@@ -6,33 +6,74 @@ class Single:
         "MRL",
         "SRL",
     ]
+    LANGUAGE_NUMBERS = {
+        "English": 1,
+        "French": 2,
+        "German": 3,
+        "Spanish": 4,
+        "Italian": 5,
+    }
+    CONDITION_NUMBERS = {
+        "M": 1,
+        "NM": 2,
+        "EX": 3,
+        "GD": 4,
+        "LP": 5,
+        "PL": 6,
+        "PO": None,
+    }
 
     def __init__(
         self,
         name,
         set,
         *,
-        rarity=None,
-        language=None,
-        condition=None,
-        edition=None,
-        version=None,
+        language="English",
+        condition="NM",
+        first_edition=False,
         signed=False,
         altered=False,
+        version=None,
+        rarity=None,
+        rare_color=None,
         article=None,
         offers=None,
     ):
         self.name = name
         self.set = set
-        self.rarity = rarity
         self.language = language
         self.condition = condition
-        self.edition = edition
+        self.first_edition = first_edition
+        self.signed = signed
+        self.altered = altered
         self.version = version
-        self.signed = signed,
-        self.altered = altered,
+        self.rarity = rarity
+        self.rare_color = rare_color
         self.article = article
         self.offers = offers
+
+    @property
+    def filtered_article(self):
+        if self.article is None:
+            return self.article
+
+        language_filter = f"language={self.LANGUAGE_NUMBERS.get(self.language)}"
+        filters = [language_filter]
+        if self.condition != "PO":
+            condition_number = self.CONDITION_NUMBERS.get(self.condition)
+            condition_filter = f"minCondition={condition_number}"
+            filters.append(condition_filter)
+        if self.signed is True:
+            signed_filter = "isSigned=Y"
+            filters.append(signed_filter)
+        if self.first_edition is True:
+            first_edition_filter = "isFirstEd=Y"
+            filters.append(first_edition_filter)
+        if self.altered is True:
+            altered_filter = "isAltered=Y"
+            filters.append(altered_filter)
+
+        return self.article + f"?{"&".join(filters)}"
 
     @property
     def set_is_duelist_league(self):
@@ -56,6 +97,6 @@ class Single:
             self.rarity,
             self.language,
             self.condition,
-            self.edition,
+            self.first_edition,
         ]
         return not any(attr is None for attr in other_required_attrs)

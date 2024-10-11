@@ -21,7 +21,7 @@ def core_tatsunoko():
         rarity="ScR",
         language="EN",
         condition="NM",
-        edition=None,
+        first_edition=None,
         version=None,
         altered=False,
         signed=False,
@@ -36,10 +36,8 @@ def lob_dark_magician():
         rarity="UR",
         language="EN",
         condition="NM",
-        edition="1st Edition",
+        first_edition="1st Edition",
         version="EN",
         altered=False,
         signed=False,
     )
-
-
