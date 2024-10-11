@@ -2,9 +2,9 @@
 from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from marketwatch.offer import Offer
+from marketwatch.article import Article
 from marketwatch.binder import Binder
-from marketwatch.exceptions import ArticleNotFoundError
+from marketwatch.exceptions import ProductPageNotFoundError
 
 
 class PriceBot:
@@ -49,7 +49,7 @@ class PriceBot:
         return name
 
 
-    def _set_article_attribute_for_single(self, driver, single):
+    def _set_url_attribute_for_single(self, driver, single):
         page_count = count(1)
         results_xpath = "//div[@class='table-body']/div"
         set_xpath = "./div[3]"
@@ -70,21 +70,21 @@ class PriceBot:
                     if name == name_for_version:
                         print("!!!", set_, name)
                         print("FOUND", name_element.get_attribute("href"))
-                        single.article = name_element.get_attribute("href")
+                        single.url = name_element.get_attribute("href")
                         return
                     else:
                         print(" * ", set_, name)
             else:
                 if is_last_page:
-                    raise ArticleNotFoundError("last results page reached")
+                    raise ProductPageNotFoundError("last results page reached")
 
-    def _set_offers_attribute_for_single(self, driver, single, n_offers=3):
-        """Add n lowest offers to single."""
-        driver.get(single.article)
+    def _set_articles_attribute_for_single(self, driver, single, n_articles=3):
+        """Add n lowest articles to single."""
+        driver.get(single.url)
 
-        offers = []
-        offer_xpath = "//div[@class='row g-0 article-row']"
-        elements = driver.find_elements(By.XPATH, offer_xpath)
+        articles = []
+        article_xpath = "//div[@class='row g-0 article-row']"
+        elements = driver.find_elements(By.XPATH, article_xpath)
 
         for element in elements:
             location_xpath = ".//span[@class='icon d-flex has-content-centered me-1']"
@@ -103,19 +103,19 @@ class PriceBot:
             price_xpath = ".//div[@class='col-offer col-auto']//span"
             price = element.find_element(By.XPATH, price_xpath).text
 
-            n_available_xpath = "./div[3]/div[2]"
-            n_available = element.find_element(By.XPATH, n_available_xpath).text
+            quantity_xpath = "./div[3]/div[2]"
+            quantity = element.find_element(By.XPATH, quantity_xpath).text
 
-            offer = Offer(location, seller, comment, price, n_available)
-            offers.append(offer)
-        single.offers = offers
+            article = Article(location, seller, comment, price, quantity)
+            articles.append(article)
+        single.articles = articles
 
-    def update_binder_with_offers(self, binder, n_offers=3):
-        """Add n lowest offers to each single in binder."""
+    def update_binder_with_articles(self, binder, n_articles=3):
+        """Add n lowest articles to each single in binder."""
         with self.driver_context_manager() as driver:
             for single in binder:
-                self._set_article_attribute_for_single(driver, single)
-                self._set_offers_attribute_for_single(driver, single, n_offers)
+                self._set_url_attribute_for_single(driver, single)
+                self._set_articles_attribute_for_single(driver, single, n_articles)
 
     def get_prices_for_single(self, driver, single):
         pass

@@ -36,8 +36,8 @@ class Single:
         version=None,
         rarity=None,
         rare_color=None,
-        article=None,
-        offers=None,
+        url=None,
+        articles=None,
     ):
         self.name = name
         self.set = set
@@ -49,13 +49,13 @@ class Single:
         self.version = version
         self.rarity = rarity
         self.rare_color = rare_color
-        self.article = article
-        self.offers = offers
+        self.url = url
+        self.articles = articles
 
     @property
-    def filtered_article(self):
-        if self.article is None:
-            return self.article
+    def filtered_url(self):
+        if self.url is None:
+            return self.url
 
         language_filter = f"language={self.LANGUAGE_NUMBERS.get(self.language)}"
         filters = [language_filter]
@@ -73,7 +73,7 @@ class Single:
             altered_filter = "isAltered=Y"
             filters.append(altered_filter)
 
-        return self.article + f"?{"&".join(filters)}"
+        return self.url + f"?{"&".join(filters)}"
 
     @property
     def set_is_duelist_league(self):
