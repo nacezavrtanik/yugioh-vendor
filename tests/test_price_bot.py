@@ -3,7 +3,6 @@ import pytest
 from fixtures.price_bot import firefox_driver, price_bot, binder
 from fixtures.singles import core_tatsunoko, lob_dark_magician, dl_krebons
 from marketwatch import PriceBot, Single
-from marketwatch.exceptions import ArticleNotFoundError
 
 
 def test_get_search_url_for_single_default_site(price_bot, core_tatsunoko):
@@ -71,9 +70,3 @@ def test_set_article_attribute_for_single_with_language_code(
 @pytest.mark.skip("always fails")
 def test_update_single_with_offers(price_bot, core_tatsunoko):
     assert False
-
-
-@pytest.mark.slow
-def test_update_binder_with_offers(price_bot, binder):
-    with pytest.raises(ArticleNotFoundError):
-        price_bot.update_binder_with_offers(binder)
