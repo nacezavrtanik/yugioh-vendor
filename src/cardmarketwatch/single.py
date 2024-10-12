@@ -41,22 +41,40 @@ class Single:
     ):
         self.name = name
         self.set = set
-        self.language = language
-        self.condition = condition
-        self.first_edition = first_edition
-        self.signed = signed
-        self.altered = altered
-        self.version = version
-        self.rarity = rarity
-        self.rare_color = rare_color
-        self.url = url
-        self.articles = articles
+        self.language = language if language != "" else "English"
+        self.condition = condition if condition != "" else "NM"
+        self.first_edition = first_edition if first_edition != "" else False
+        self.signed = signed if signed != "" else False
+        self.altered = altered if altered != "" else False
+        self.version = version if version != "" else None
+        self.rarity = rarity if rarity != "" else None
+        self.rare_color = rare_color if rare_color != "" else None
+        self.url = url if url != "" else None
+        self.articles = articles if articles != "" else None
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.name}', '{self.set}')"
 
     def __str__(self):
         return self.name
+
+    def __eq__(self, other):
+        if not isinstance(other, Single):
+            return NotImplemented
+        return all([
+            self.name == other.name,
+            self.set == other.set,
+            self.language == other.language,
+            self.condition == other.condition,
+            self.first_edition is other.first_edition,
+            self.signed is other.signed,
+            self.altered is other.altered,
+            self.version == other.version,
+            self.rarity == other.rarity,
+            self.rare_color == other.rare_color,
+            self.url == other.url,
+            self.articles == other.articles,
+        ])
 
     @property
     def filtered_url(self):

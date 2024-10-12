@@ -1,5 +1,5 @@
 
-import pandas as pd
+import csv
 from cardmarketwatch.single import Single
 
 
@@ -19,12 +19,9 @@ class Binder(list):
         super().__init__(_validate(iterable))
 
     @classmethod
-    def from_excel(cls, filepath, name=None):
-        singles = (
-            Single(**row.to_dict())
-            for _, row in pd.read_excel(filepath).iterrows()
-        )
-        return cls(singles)
+    def from_csv(cls, filepath):
+        with open(filepath, newline="") as file:
+            return cls(Single(**row) for row in csv.DictReader(file))
 
-    def to_excel(self, filepath):
-        """Save singles in binder to excel, and add columns for offers."""
+    def to_csv(self, filepath):
+        """Save singles in binder to CSV, account for articles."""

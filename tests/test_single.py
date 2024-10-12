@@ -2,6 +2,7 @@
 import pytest
 from fixtures.singles import mrd_mirror_force, dl_krebons
 from cardmarketwatch import Single
+from cardmarketwatch.article import Article
 
 
 def test_instantiation_succeeds_for_only_keyword_args():
@@ -40,6 +41,23 @@ def test_instatiation_fails_for_positional_name_set_and_positional_args():
             version="EN",
         )
 
+
+def test_eq():
+    kwargs = {
+        "name": "Kotodama",
+        "set": "MRL",
+        "language": "German",
+        "condition": "PL",
+        "first_edition": False,
+        "signed": True,
+        "altered": False,
+        "version": 1,
+        "rarity": "Common",
+        "rare_color": None,
+        "url": "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Spell-Ruler/Kotodama-V1-Common",
+        "articles": [Article("Germany", "DerHelmutKohl", "", 99.99, 1)],
+    }
+    assert Single(**kwargs) == Single(**kwargs)
 
 def test_filtered_url_when_url_is_none():
     assert Single("Sangan", "MRD").filtered_url is None
