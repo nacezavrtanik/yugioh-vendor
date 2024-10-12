@@ -8,8 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
-from marketwatch import PriceBot, Single, Binder
-import marketwatch.config as cfg
+from cardmarketwatch import Marketwatch, Single, Binder
+import cardmarketwatch.config as cfg
 
 
 def _system_is_ubuntu_22_04_or_later():
@@ -50,8 +50,8 @@ def firefox_driver():
 
 
 @pytest.fixture()
-def price_bot():
-    return PriceBot(firefox)
+def marketwatch():
+    return Marketwatch(firefox)
 
 
 @pytest.fixture()

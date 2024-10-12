@@ -1,7 +1,7 @@
 
 import pytest
 from fixtures.singles import mrd_mirror_force, dl_krebons
-from marketwatch import Single
+from cardmarketwatch import Single
 
 
 def test_instantiation_succeeds_for_only_keyword_args():

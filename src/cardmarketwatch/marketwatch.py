@@ -2,13 +2,13 @@
 from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from marketwatch.article import Article
-from marketwatch.price import Price
-from marketwatch.binder import Binder
-from marketwatch.exceptions import ProductPageNotFoundError
+from cardmarketwatch.article import Article
+from cardmarketwatch.price import Price
+from cardmarketwatch.binder import Binder
+from cardmarketwatch.exceptions import ProductPageNotFoundError
 
 
-class PriceBot:
+class Marketwatch:
     SEARCH_URL_TEMPLATE = (
         "https://www.cardmarket.com/en/YuGiOh/Products/Search"
         "?searchString={search_term}"
