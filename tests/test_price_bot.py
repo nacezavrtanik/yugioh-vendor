@@ -5,14 +5,14 @@ from fixtures.singles import core_tatsunoko, lob_dark_magician, dl_krebons
 from marketwatch import PriceBot, Single
 
 
-def test_get_search_url_for_single_default_site(price_bot, core_tatsunoko):
+def test_generate_search_url_for_single_default_site(price_bot, core_tatsunoko):
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Search?searchString=Tatsunoko&site=1"
-    assert price_bot._get_search_url_for_single(core_tatsunoko) == expected
+    assert price_bot._generate_search_url_for_single(core_tatsunoko) == expected
 
 
-def test_get_search_url_for_single_site_number_3(price_bot, lob_dark_magician):
+def test_generate_search_url_for_single_site_number_3(price_bot, lob_dark_magician):
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Search?searchString=Dark+Magician&site=3"
-    assert price_bot._get_search_url_for_single(
+    assert price_bot._generate_search_url_for_single(
         lob_dark_magician, site_number=3
     ) == expected
 
@@ -38,35 +38,30 @@ def test_get_single_name_for_version_with_language_code(
 
 
 @pytest.mark.slow
-def test_set_url_attribute_for_single_only_one_version(
+def test_lookup_url_for_single_only_one_version(
     firefox_driver, price_bot, core_tatsunoko
 ):
     with firefox_driver() as driver:
-        price_bot._set_url_attribute_for_single(driver, core_tatsunoko)
+        price_bot._lookup_url_for_single(driver, core_tatsunoko)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Clash-of-Rebellions/Tatsunoko"
     assert core_tatsunoko.url == expected
 
 
 @pytest.mark.slow
-def test_set_url_attribute_for_single_duelist_league(
+def test_lookup_url_for_single_duelist_league(
     firefox_driver, price_bot, dl_krebons
 ):
     with firefox_driver() as driver:
-        price_bot._set_url_attribute_for_single(driver, dl_krebons)
+        price_bot._lookup_url_for_single(driver, dl_krebons)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V2-Rare"
     assert dl_krebons.url == expected
 
 
 @pytest.mark.skip("cannot implement correctly until I understand the logic")
-def test_set_url_attribute_for_single_with_language_code(
+def test_lookup_url_for_single_with_language_code(
     firefox_driver, price_bot, lob_dark_magician
 ):
     with firefox_driver() as driver:
-        price_bot._set_url_attribute_for_single(driver, lob_dark_magician)
+        price_bot._lookup_url_for_single(driver, lob_dark_magician)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Legend-of-Blue-Eyes-White-Dragon/Dark-Magician-V4-Ultra-Rare"
     assert lob_dark_magician.url == expected
-
-
-@pytest.mark.skip("always fails")
-def test_update_single_with_articles(price_bot, core_tatsunoko):
-    assert False
