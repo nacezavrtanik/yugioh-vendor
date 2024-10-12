@@ -69,12 +69,12 @@ class PriceBot:
                     name = name_element.text
                     name_for_version = self._get_single_name_for_version(single)
                     if name == name_for_version:
-                        print("!!!", set_, name)
+                        print("!!!", repr(single))
                         print("FOUND", name_element.get_attribute("href"))
                         single.url = name_element.get_attribute("href")
                         return
                     else:
-                        print(" * ", set_, name)
+                        print(" * ", repr(single))
             else:
                 if is_last_page:
                     raise ProductPageNotFoundError("last results page reached")

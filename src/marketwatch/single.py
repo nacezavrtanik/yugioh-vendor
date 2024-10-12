@@ -52,6 +52,12 @@ class Single:
         self.url = url
         self.articles = articles
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.name}', '{self.set}')"
+
+    def __str__(self):
+        return self.name
+
     @property
     def filtered_url(self):
         if self.url is None:
