@@ -5,14 +5,14 @@ from fixtures.singles import core_tatsunoko, lob_dark_magician, dl_krebons
 from cardmarketwatch import Marketwatch, Single
 
 
-def test_generate_search_url_for_single_default_site(marketwatch, core_tatsunoko):
+def test_get_search_url_for_single_default_site(marketwatch, core_tatsunoko):
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Search?searchString=Tatsunoko&site=1"
-    assert marketwatch._generate_search_url_for_single(core_tatsunoko) == expected
+    assert marketwatch._get_search_url_for_single(core_tatsunoko) == expected
 
 
-def test_generate_search_url_for_single_site_number_3(marketwatch, lob_dark_magician):
+def test_get_search_url_for_single_site_number_3(marketwatch, lob_dark_magician):
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Search?searchString=Dark+Magician&site=3"
-    assert marketwatch._generate_search_url_for_single(
+    assert marketwatch._get_search_url_for_single(
         lob_dark_magician, site_number=3
     ) == expected
 

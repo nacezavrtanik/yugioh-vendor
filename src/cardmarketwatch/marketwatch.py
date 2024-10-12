@@ -29,6 +29,24 @@ class Marketwatch:
         self.driver_context_manager = driver_context_manager
         self.manual_lookup_threshold = manual_lookup_threshold
 
+    def _get_search_url_for_single(self, single, site_number=1):
+        return self.SEARCH_URL_TEMPLATE.format(
+            search_term=single.name.replace(" ", "+"),
+            site_number=site_number,
+        )
+
+    def _get_single_name_for_version(self, single):
+        if single.set_is_duelist_league:
+            number = self.DUELIST_LEAGUE_VERSION_MAPPING.get(single.version)
+            assert number
+            suffix = f" (V.{number} - Rare)"
+            name = single.name + suffix
+        elif single.set_requires_language_code:
+            assert single.version
+        else:
+            name = single.name
+        return name
+
     def _lookup_url_for_single(self, driver, single):
         page_count = count(1)
         results_xpath = "//div[@class='table-body']/div"
@@ -37,7 +55,7 @@ class Marketwatch:
         results_per_full_search_page = 30
 
         while True:
-            search_url = self._generate_search_url_for_single(
+            search_url = self._get_search_url_for_single(
                 single, next(page_count)
             )
             driver.get(search_url)
@@ -61,24 +79,6 @@ class Marketwatch:
             else:
                 if is_last_page:
                     raise ProductPageNotFoundError("last results page reached")
-
-    def _generate_search_url_for_single(self, single, site_number=1):
-        return self.SEARCH_URL_TEMPLATE.format(
-            search_term=single.name.replace(" ", "+"),
-            site_number=site_number,
-        )
-
-    def _get_single_name_for_version(self, single):
-        if single.set_is_duelist_league:
-            number = self.DUELIST_LEAGUE_VERSION_MAPPING.get(single.version)
-            assert number
-            suffix = f" (V.{number} - Rare)"
-            name = single.name + suffix
-        elif single.set_requires_language_code:
-            assert single.version
-        else:
-            name = single.name
-        return name
 
     def _lookup_articles_for_single(self, driver, single, max_articles):
         driver.get(single.filtered_url)
