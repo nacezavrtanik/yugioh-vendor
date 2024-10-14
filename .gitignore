@@ -5,4 +5,5 @@ build/
 excels/
 src/cardmarket_prices/firefox.py
 dev.py
+setup
 
