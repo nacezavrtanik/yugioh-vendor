@@ -1,11 +1,12 @@
 
 import pytest
 from cardmarketwatch import Binder, Single
+from cardmarketwatch.single import Language, Condition
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
     singles = [
-        Single("Gemini Elf", "LON", condition="LP"),
+        Single("Gemini Elf", "LON", condition=Condition.LIGHT_PLAYED),
         Single("Beast of Talwar", "LOD", first_edition=True),
     ]
     Binder(singles)
@@ -24,18 +25,40 @@ def test_instantiation_fails_for_list_of_non_singles():
 
 def test_instantiation_from_csv_succeeds(tmpdir):
     content = (
-        'name,set,rarity,language,condition,first_edition,version,url,articles\n'
-        'Tatsunoko,CORE,ScR,French,NM,,,,\n'
-        'Krebons,TDGS,C,English,NM,,,,\n'
-        '"Brionac, Dragon of the Ice Barrier",HA01,,,,,,,\n'
+        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+        "Tatsunoko,CORE,English,NM,yes,,,,,,\n"
+        "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
+        '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
     expected = Binder([
-        Single("Tatsunoko", "CORE", rarity="ScR", language="French", condition="NM"),
-        Single("Krebons", "TDGS", rarity="C", language="English", condition="NM"),
-        Single("Brionac, Dragon of the Ice Barrier", "HA01"),
+        Single(
+            "Tatsunoko",
+            "CORE",
+            language="English",
+            condition="NM",
+            first_edition=True,
+        ),
+        Single(
+            "Krebons",
+            "DL09",
+            condition=Condition.GOOD,
+            signed=True,
+            version=1,
+            rarity="R",
+            rare_color="blue",
+            url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
+        ),
+        Single(
+            "Brionac, Dragon of the Ice Barrier",
+            "HA01",
+            language=Language.FRENCH,
+            altered=True,
+            rarity="ScR",
+            url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
+        ),
 
     ])
     assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
