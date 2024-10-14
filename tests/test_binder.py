@@ -3,6 +3,7 @@ import os
 import pytest
 from cardmarketwatch import Binder, Single
 from cardmarketwatch.single import Language, Condition
+from cardmarketwatch.binder import CSVField
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
@@ -153,3 +154,15 @@ def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
 
     with pytest.raises(TypeError):
         Binder.from_csv(file)
+
+
+def test_each_csv_field_has_exactly_one_specified_type():
+    assert all([
+        sum([field.is_string, field.is_integer, field.is_boolean]) == 1
+        for field in CSVField
+    ])
+
+
+def test__csv_field_as_arg():
+    assert CSVField.SET.as_arg() == "set"
+    assert CSVField.FIRST_EDITION.as_arg() == "first_edition"
