@@ -46,7 +46,7 @@ def _process(row):
     for key, value in row.items():
         try:
             field = CSVField(key)
-        except TypeError:
+        except ValueError:
             continue
 
         if field.is_string:
