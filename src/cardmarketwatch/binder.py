@@ -36,6 +36,17 @@ class Binder(list):
     def __init__(self, iterable):
         super().__init__(_validate(iterable))
 
+    @staticmethod
+    def create_csv_template(filepath):
+        content = (
+            "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+            "Tatsunoko,CORE,English,NM,yes,,,,,,\n"
+            "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
+            '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
+        )
+        with open(filepath, "w") as file:
+            file.write(content)
+
     @classmethod
     def from_csv(cls, filepath):
         with open(filepath, newline="") as file:

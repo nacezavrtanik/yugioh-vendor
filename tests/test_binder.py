@@ -1,4 +1,5 @@
 
+import os
 import pytest
 from cardmarketwatch import Binder, Single
 from cardmarketwatch.single import Language, Condition
@@ -23,15 +24,17 @@ def test_instantiation_fails_for_list_of_non_singles():
         Binder(non_singles)
 
 
+def test_create_csv_template(tmpdir):
+    subdir = tmpdir.mkdir("sub")
+    assert os.listdir(subdir) == []
+    file = subdir/"template.csv"
+    Binder.create_csv_template(file)
+    assert os.listdir(subdir) == ["template.csv"]
+
+
 def test_instantiation_from_csv_succeeds(tmpdir):
-    content = (
-        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
-        "Tatsunoko,CORE,English,NM,yes,,,,,,\n"
-        "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
-        '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
-    )
-    file = tmpdir.mkdir("sub").join("tmp.csv")
-    file.write(content)
+    subdir = tmpdir.mkdir("sub")
+    Binder.create_csv_template(subdir/"template.csv")
 
     expected = Binder([
         Single(
@@ -61,4 +64,4 @@ def test_instantiation_from_csv_succeeds(tmpdir):
         ),
 
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+    assert Binder.from_csv(tmpdir/"sub"/"template.csv") == expected
