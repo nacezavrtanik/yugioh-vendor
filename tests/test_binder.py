@@ -33,8 +33,14 @@ def test_create_csv_template(tmpdir):
 
 
 def test_instantiation_from_csv_succeeds(tmpdir):
-    subdir = tmpdir.mkdir("sub")
-    Binder.create_csv_template(subdir/"template.csv")
+    content = (
+        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+        "Tatsunoko,CORE,English,NM,yes,,,,,,\n"
+        "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
+        '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
+    )
+    file = tmpdir.mkdir("sub").join("tmp.csv")
+    file.write(content)
 
     expected = Binder([
         Single(
@@ -62,6 +68,17 @@ def test_instantiation_from_csv_succeeds(tmpdir):
             rarity="ScR",
             url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
-
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"template.csv") == expected
+    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+
+
+def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
+    content = (
+        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+        "Tatsunoko,,English,NM,yes,,,,,,\n"
+    )
+    file = tmpdir.mkdir("sub").join("tmp.csv")
+    file.write(content)
+
+    with pytest.raises(TypeError):
+        Binder.from_csv(file)

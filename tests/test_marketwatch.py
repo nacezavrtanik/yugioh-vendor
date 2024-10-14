@@ -1,6 +1,6 @@
 
 import pytest
-from fixtures.marketwatch import firefox_driver, marketwatch, binder
+from fixtures.marketwatch import firefox_driver, marketwatch
 from fixtures.singles import core_tatsunoko, lob_dark_magician, dl_krebons
 from cardmarketwatch import Marketwatch, Single
 

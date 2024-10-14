@@ -52,8 +52,3 @@ def firefox_driver():
 @pytest.fixture()
 def marketwatch():
     return Marketwatch(firefox)
-
-
-@pytest.fixture()
-def binder():
-    return Binder.from_excel(cfg.EXCEL)
