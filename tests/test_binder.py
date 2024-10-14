@@ -2,7 +2,7 @@
 import os
 import pytest
 from cardmarketwatch import Binder, Single
-from cardmarketwatch.single import Language, Condition
+from cardmarketwatch.single import Language, Condition, Rarity, RareColor
 from cardmarketwatch.binder import CSVField
 
 
@@ -57,8 +57,8 @@ def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
             condition=Condition.GOOD,
             signed=True,
             version=1,
-            rarity="R",
-            rare_color="blue",
+            rarity=Rarity.RARE,
+            rare_color=RareColor.BLUE,
             product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(
@@ -128,8 +128,8 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
             condition=Condition.GOOD,
             signed=True,
             version=1,
-            rarity="R",
-            rare_color="blue",
+            rarity=Rarity.RARE,
+            rare_color=RareColor.BLUE,
             product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(

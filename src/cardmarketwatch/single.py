@@ -1,5 +1,5 @@
 
-from enum import StrEnum
+from enum import StrEnum, auto
 from dataclasses import dataclass, KW_ONLY
 
 from cardmarketwatch.article import Article
@@ -23,6 +23,25 @@ class Condition(StrEnum):
     POOR = "PO"
 
 
+class Rarity(StrEnum):
+    COMMON = "C"
+    RARE = "R"
+    SUPER_RARE = "SR"
+    ULTRA_RARE = "UR"
+    ULTIMATE_RARE = "UtR"
+    SECRET_RARE = "ScR"
+    STARLIGHT_RARE = "SLR"
+    GHOST_RARE = "GR"
+    SPECIAL = "Special"
+
+
+class RareColor(StrEnum):
+    BLUE = auto()
+    GREEN = auto()
+    GOLD = auto()
+    SILVER = auto()
+
+
 @dataclass
 class Single:
     name: str
@@ -34,8 +53,8 @@ class Single:
     signed: bool = False
     altered: bool = False
     version: int = None
-    rarity: str = None
-    rare_color: str = None
+    rarity: Rarity = None
+    rare_color: RareColor = None
     product_page: str = None
     articles: list[Article] = None
 

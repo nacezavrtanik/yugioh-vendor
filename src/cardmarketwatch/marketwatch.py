@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from cardmarketwatch.article import Article
 from cardmarketwatch.price import Price
+from cardmarketwatch.single import RareColor
 from cardmarketwatch.binder import Binder
 from cardmarketwatch.exceptions import ProductPageNotFoundError
 
@@ -15,10 +16,10 @@ class Marketwatch:
         "&site={site_number}"
     )
     DUELIST_LEAGUE_VERSION_MAPPING = {
-        "blue": 1,
-        "green": 2,
-        "gold": 3,
-        "silver": 4,
+        RareColor.BLUE: 1,
+        RareColor.GREEN: 2,
+        RareColor.GOLD: 3,
+        RareColor.SILVER: 4,
     }
 
     def __init__(
