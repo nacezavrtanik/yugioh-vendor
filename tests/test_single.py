@@ -2,6 +2,7 @@
 import pytest
 from fixtures.singles import mrd_mirror_force, dl_krebons
 from cardmarketwatch import Single
+from cardmarketwatch.single import Language, Condition
 from cardmarketwatch.article import Article
 
 
@@ -10,10 +11,9 @@ def test_instantiation_succeeds_for_only_keyword_args():
         name="Dark Magician",
         set="SDY",
         rarity="UR",
-        language="EN",
-        condition="NM",
-        first_edition="1st Edition",
-        version="EN",
+        language=Language.SPANISH,
+        condition=Condition.MINT,
+        first_edition=True,
     )
 
 
@@ -22,10 +22,9 @@ def test_instantiation_succeeds_for_positional_name_set_and_keyword_args():
         "Dark Magician",
         "SDY",
         rarity="UR",
-        language="EN",
-        condition="NM",
-        first_edition="1st Edition",
-        version="EN",
+        language=Language.SPANISH,
+        condition=Condition.MINT,
+        first_edition=True,
     )
 
 
@@ -35,29 +34,11 @@ def test_instatiation_fails_for_positional_name_set_and_positional_args():
             "Dark Magician",
             "SDY",
             "UR",
-            language="EN",
-            condition="NM",
-            first_edition="1st Edition",
-            version="EN",
+            language=Language.ENGLISH,
+            condition=Condition.MINT,
+            first_edition=True,
         )
 
-
-def test_eq():
-    kwargs = {
-        "name": "Kotodama",
-        "set": "MRL",
-        "language": "German",
-        "condition": "PL",
-        "first_edition": False,
-        "signed": True,
-        "altered": False,
-        "version": 1,
-        "rarity": "Common",
-        "rare_color": None,
-        "url": "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Spell-Ruler/Kotodama-V1-Common",
-        "articles": [Article("Germany", "DerHelmutKohl", "", 99.99, 1)],
-    }
-    assert Single(**kwargs) == Single(**kwargs)
 
 def test_filtered_url_when_url_is_none():
     assert Single("Sangan", "MRD").filtered_url is None
@@ -72,11 +53,12 @@ def test_filtered_url_default_filters():
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Collectors-Tins-2010/Stardust-Dragon?language=1&minCondition=2"
     assert single.filtered_url == expected
 
+
 def test_filtered_url_some_filters_example_1():
     single = Single(
         "Sangan",
         "DB2",
-        language="German",
+        language=Language.GERMAN,
         condition="LP",
         url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Dark-Beginning-2/Sangan",
     )
@@ -88,7 +70,7 @@ def test_filtered_url_some_filters_example_2():
     single = Single(
         "Stardust Dragon",
         "TDGS",
-        language="French",
+        language=Language.FRENCH,
         first_edition=True,
         url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/The-Duelist-Genesis/Stardust-Dragon-V-6",
     )
@@ -100,8 +82,8 @@ def test_filtered_url_all_filters():
     single = Single(
         "Dark Rabbit",
         "SOVR",
-        language="Spanish",
-        condition="EX",
+        language=Language.SPANISH,
+        condition=Condition.EXCELLENT,
         signed=True,
         first_edition=True,
         altered=True,

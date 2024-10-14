@@ -1,5 +1,44 @@
 
+from enum import StrEnum
+from dataclasses import dataclass, KW_ONLY
+
+from cardmarketwatch.article import Article
+
+
+class Language(StrEnum):
+    ENGLISH = "English"
+    FRENCH = "French"
+    GERMAN = "German"
+    SPANISH = "Spanish"
+    ITALIAN = "Italian"
+
+
+class Condition(StrEnum):
+    MINT = "M"
+    NEAR_MINT = "NM"
+    EXCELLENT = "EX"
+    GOOD = "GD"
+    LIGHT_PLAYED = "LP"
+    PLAYED = "PL"
+    POOR = "PO"
+
+
+@dataclass
 class Single:
+    name: str
+    set: str
+    _: KW_ONLY
+    language: Language = Language.ENGLISH
+    condition: Condition = Condition.NEAR_MINT
+    first_edition: bool = False
+    signed: bool = False
+    altered: bool = False
+    version: int = None
+    rarity: str = None
+    rare_color: str = None
+    url: str = None
+    articles: list[Article] = None
+
     LANGUAGE_CODE_SETS = [
         "LOB",
         "MRD",
@@ -7,74 +46,24 @@ class Single:
         "SRL",
     ]
     LANGUAGE_NUMBERS = {
-        "English": 1,
-        "French": 2,
-        "German": 3,
-        "Spanish": 4,
-        "Italian": 5,
+        Language.ENGLISH: 1,
+        Language.FRENCH: 2,
+        Language.GERMAN: 3,
+        Language.SPANISH: 4,
+        Language.ITALIAN: 5,
     }
     CONDITION_NUMBERS = {
-        "M": 1,
-        "NM": 2,
-        "EX": 3,
-        "GD": 4,
-        "LP": 5,
-        "PL": 6,
-        "PO": None,
+        Condition.MINT: 1,
+        Condition.NEAR_MINT: 2,
+        Condition.EXCELLENT: 3,
+        Condition.GOOD: 4,
+        Condition.LIGHT_PLAYED: 5,
+        Condition.PLAYED: 6,
+        Condition.POOR: None,
     }
-
-    def __init__(
-        self,
-        name,
-        set,
-        *,
-        language="English",
-        condition="NM",
-        first_edition=False,
-        signed=False,
-        altered=False,
-        version=None,
-        rarity=None,
-        rare_color=None,
-        url=None,
-        articles=None,
-    ):
-        self.name = name
-        self.set = set
-        self.language = language if language != "" else "English"
-        self.condition = condition if condition != "" else "NM"
-        self.first_edition = first_edition if first_edition != "" else False
-        self.signed = signed if signed != "" else False
-        self.altered = altered if altered != "" else False
-        self.version = version if version != "" else None
-        self.rarity = rarity if rarity != "" else None
-        self.rare_color = rare_color if rare_color != "" else None
-        self.url = url if url != "" else None
-        self.articles = articles if articles != "" else None
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}('{self.name}', '{self.set}')"
 
     def __str__(self):
         return self.name
-
-    def __eq__(self, other):
-        if not isinstance(other, Single):
-            return NotImplemented
-        return all([
-            self.name == other.name,
-            self.set == other.set,
-            self.language == other.language,
-            self.condition == other.condition,
-            self.first_edition is other.first_edition,
-            self.signed is other.signed,
-            self.altered is other.altered,
-            self.version == other.version,
-            self.rarity == other.rarity,
-            self.rare_color == other.rare_color,
-            self.url == other.url,
-            self.articles == other.articles,
-        ])
 
     @property
     def filtered_url(self):
