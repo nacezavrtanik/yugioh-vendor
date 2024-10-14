@@ -40,45 +40,45 @@ def test_instatiation_fails_for_positional_name_set_and_positional_args():
         )
 
 
-def test_filtered_url_when_url_is_none():
-    assert Single("Sangan", "MRD").filtered_url is None
+def test_filtered_product_page_when_product_page_is_none():
+    assert Single("Sangan", "MRD").filtered_product_page is None
 
 
-def test_filtered_url_default_filters():
+def test_filtered_product_page_default_filters():
     single = Single(
         "Stardust Dragon",
         "CT07",
-        url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Collectors-Tins-2010/Stardust-Dragon",
+        product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Collectors-Tins-2010/Stardust-Dragon",
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Collectors-Tins-2010/Stardust-Dragon?language=1&minCondition=2"
-    assert single.filtered_url == expected
+    assert single.filtered_product_page == expected
 
 
-def test_filtered_url_some_filters_example_1():
+def test_filtered_product_page_some_filters_example_1():
     single = Single(
         "Sangan",
         "DB2",
         language=Language.GERMAN,
         condition="LP",
-        url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Dark-Beginning-2/Sangan",
+        product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Dark-Beginning-2/Sangan",
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Dark-Beginning-2/Sangan?language=3&minCondition=5"
-    assert single.filtered_url == expected
+    assert single.filtered_product_page == expected
 
 
-def test_filtered_url_some_filters_example_2():
+def test_filtered_product_page_some_filters_example_2():
     single = Single(
         "Stardust Dragon",
         "TDGS",
         language=Language.FRENCH,
         first_edition=True,
-        url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/The-Duelist-Genesis/Stardust-Dragon-V-6",
+        product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/The-Duelist-Genesis/Stardust-Dragon-V-6",
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/The-Duelist-Genesis/Stardust-Dragon-V-6?language=2&minCondition=2&isFirstEd=Y"
-    assert single.filtered_url == expected
+    assert single.filtered_product_page == expected
 
 
-def test_filtered_url_all_filters():
+def test_filtered_product_page_all_filters():
     single = Single(
         "Dark Rabbit",
         "SOVR",
@@ -87,10 +87,10 @@ def test_filtered_url_all_filters():
         signed=True,
         first_edition=True,
         altered=True,
-        url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Stardust-Overdrive/Dark-Rabbit",
+        product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Stardust-Overdrive/Dark-Rabbit",
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Stardust-Overdrive/Dark-Rabbit?language=4&minCondition=3&isSigned=Y&isFirstEd=Y&isAltered=Y"
-    assert single.filtered_url == expected
+    assert single.filtered_product_page == expected
 
 
 def test_set_is_duelist_league_is_true(dl_krebons):

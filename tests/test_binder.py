@@ -34,7 +34,7 @@ def test_create_csv_template(tmpdir):
 
 def test_instantiation_from_csv_succeeds(tmpdir):
     content = (
-        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
         "Tatsunoko,CORE,English,NM,yes,,,,,,\n"
         "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
         '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
@@ -58,7 +58,7 @@ def test_instantiation_from_csv_succeeds(tmpdir):
             version=1,
             rarity="R",
             rare_color="blue",
-            url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
+            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(
             "Brionac, Dragon of the Ice Barrier",
@@ -66,7 +66,7 @@ def test_instantiation_from_csv_succeeds(tmpdir):
             language=Language.FRENCH,
             altered=True,
             rarity="ScR",
-            url="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
+            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
     assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
@@ -74,7 +74,7 @@ def test_instantiation_from_csv_succeeds(tmpdir):
 
 def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
     content = (
-        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,url\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
         "Tatsunoko,,English,NM,yes,,,,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")

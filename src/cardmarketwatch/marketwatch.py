@@ -47,7 +47,7 @@ class Marketwatch:
             name = single.name
         return name
 
-    def _lookup_url_for_single(self, driver, single):
+    def _lookup_product_page_for_single(self, driver, single):
         page_count = count(1)
         results_xpath = "//div[@class='table-body']/div"
         set_xpath = "./div[3]"
@@ -69,10 +69,10 @@ class Marketwatch:
                     name = name_element.text
                     name_for_version = self._get_single_name_for_version(single)
                     if name == name_for_version:
-                        url = name_element.get_attribute("href")
+                        product_page = name_element.get_attribute("href")
                         print("!!!", repr(single))
-                        print("FOUND", url)
-                        single.url = url
+                        print("FOUND", product_page)
+                        single.product_page = product_page
                         return
                     else:
                         print(" * ", repr(single))
@@ -81,7 +81,7 @@ class Marketwatch:
                     raise ProductPageNotFoundError("last results page reached")
 
     def _lookup_articles_for_single(self, driver, single, max_articles):
-        driver.get(single.filtered_url)
+        driver.get(single.filtered_product_page)
 
         articles = []
         article_xpath = "//div[@class='row g-0 article-row']"
@@ -120,12 +120,12 @@ class Marketwatch:
 
     def lookup_single(self, single, max_articles=3):
         with self.driver_context_manager() as driver:
-            self._lookup_url_for_single(driver, single)
+            self._lookup_product_page_for_single(driver, single)
             self._lookup_articles_for_single(driver, single, max_articles)
 
     def lookup_binder(self, binder, max_articles=3):
         """Add n lowest articles to each single in binder."""
         with self.driver_context_manager() as driver:
             for single in binder:
-                self._lookup_url_for_single(driver, single)
+                self._lookup_product_page_for_single(driver, single)
                 self._lookup_articles_for_single(driver, single, max_articles)

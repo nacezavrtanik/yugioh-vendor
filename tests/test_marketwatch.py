@@ -38,30 +38,30 @@ def test_get_single_name_for_version_with_language_code(
 
 
 @pytest.mark.slow
-def test_lookup_url_for_single_only_one_version(
+def test_lookup_product_page_for_single_only_one_version(
     firefox_driver, marketwatch, core_tatsunoko
 ):
     with firefox_driver() as driver:
-        marketwatch._lookup_url_for_single(driver, core_tatsunoko)
+        marketwatch._lookup_product_page_for_single(driver, core_tatsunoko)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Clash-of-Rebellions/Tatsunoko"
-    assert core_tatsunoko.url == expected
+    assert core_tatsunoko.product_page == expected
 
 
 @pytest.mark.slow
-def test_lookup_url_for_single_duelist_league(
+def test_lookup_product_page_for_single_duelist_league(
     firefox_driver, marketwatch, dl_krebons
 ):
     with firefox_driver() as driver:
-        marketwatch._lookup_url_for_single(driver, dl_krebons)
+        marketwatch._lookup_product_page_for_single(driver, dl_krebons)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V2-Rare"
-    assert dl_krebons.url == expected
+    assert dl_krebons.product_page == expected
 
 
 @pytest.mark.skip("cannot implement correctly until I understand the logic")
-def test_lookup_url_for_single_with_language_code(
+def test_lookup_product_page_for_single_with_language_code(
     firefox_driver, marketwatch, lob_dark_magician
 ):
     with firefox_driver() as driver:
-        marketwatch._lookup_url_for_single(driver, lob_dark_magician)
+        marketwatch._lookup_product_page_for_single(driver, lob_dark_magician)
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Legend-of-Blue-Eyes-White-Dragon/Dark-Magician-V4-Ultra-Rare"
-    assert lob_dark_magician.url == expected
+    assert lob_dark_magician.product_page == expected

@@ -36,7 +36,7 @@ class Single:
     version: int = None
     rarity: str = None
     rare_color: str = None
-    url: str = None
+    product_page: str = None
     articles: list[Article] = None
 
     LANGUAGE_CODE_SETS = [
@@ -66,9 +66,9 @@ class Single:
         return self.name
 
     @property
-    def filtered_url(self):
-        if self.url is None:
-            return self.url
+    def filtered_product_page(self):
+        if self.product_page is None:
+            return self.product_page
 
         language_filter = f"language={self.LANGUAGE_NUMBERS.get(self.language)}"
         filters = [language_filter]
@@ -86,7 +86,11 @@ class Single:
             altered_filter = "isAltered=Y"
             filters.append(altered_filter)
 
-        return self.url + f"?{"&".join(filters)}"
+        return self.product_page + f"?{"&".join(filters)}"
+
+    @property
+    def url(self):
+        return self.product_page
 
     @property
     def set_is_duelist_league(self):
