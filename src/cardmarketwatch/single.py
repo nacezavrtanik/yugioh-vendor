@@ -63,7 +63,7 @@ class Single:
     }
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.set})"
 
     @property
     def filtered_product_page(self):

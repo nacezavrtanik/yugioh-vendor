@@ -13,4 +13,4 @@ class Price(float):
         return f"Price(value={self.value}, unit='{self.unit}')"
 
     def __str__(self):
-        return f"{self.value} {self.unit}"
+        return f"{self.value:,.2f} {self.unit}"
