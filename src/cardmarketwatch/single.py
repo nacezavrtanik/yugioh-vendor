@@ -8,7 +8,7 @@ from cardmarketwatch.descriptors import UpperString, OneOf
 @dataclass
 class Single:
     name: str
-    set: UpperString
+    set: UpperString = UpperString()
     _: KW_ONLY
     language: OneOf = OneOf(Language, default=Language.ENGLISH)
     condition: OneOf = OneOf(Condition, default=Condition.NEAR_MINT)
