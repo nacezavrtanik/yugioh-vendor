@@ -1,6 +1,7 @@
 
 import pytest
 from cardmarketwatch import Single
+from cardmarketwatch.single import Language
 
 
 @pytest.fixture()
@@ -19,7 +20,7 @@ def core_tatsunoko():
         "Tatsunoko",
         "CORE",
         rarity="ScR",
-        language="EN",
+        language=Language.ENGLISH,
         condition="NM",
         first_edition=None,
         version=None,
@@ -34,7 +35,7 @@ def lob_dark_magician():
         "Dark Magician",
         "LOB",
         rarity="UR",
-        language="EN",
+        language=Language.ENGLISH,
         condition="NM",
         first_edition="1st Edition",
         version="EN",

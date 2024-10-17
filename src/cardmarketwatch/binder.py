@@ -1,44 +1,7 @@
 
-import enum
 import csv
 from cardmarketwatch.single import Single
-
-
-class CSVField(enum.StrEnum):
-    NAME = "Name"
-    SET = "Set"
-    LANGUAGE = "Language"
-    CONDITION = "Condition"
-    FIRST_EDITION = "First Edition"
-    SIGNED = "Signed"
-    ALTERED = "Altered"
-    VERSION = "Version"
-    RARITY = "Rarity"
-    RARE_COLOR = "Rare Color"
-    PRODUCT_PAGE = "Product Page"
-
-    @property
-    def is_string(self):
-        return self in [
-            self.NAME,
-            self.SET,
-            self.LANGUAGE,
-            self.CONDITION,
-            self.RARITY,
-            self.RARE_COLOR,
-            self.PRODUCT_PAGE,
-        ]
-
-    @property
-    def is_integer(self):
-        return self in [self.VERSION]
-
-    @property
-    def is_boolean(self):
-        return self in [self.FIRST_EDITION, self.SIGNED, self.ALTERED]
-
-    def as_arg(self):
-        return self.lower().replace(" ", "_")
+from cardmarketwatch.enums import CSVField
 
 
 def _process(row):

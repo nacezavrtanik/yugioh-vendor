@@ -1,45 +1,7 @@
 
-from enum import StrEnum, auto
 from dataclasses import dataclass, KW_ONLY
-
 from cardmarketwatch.article import Article
-
-
-class Language(StrEnum):
-    ENGLISH = "English"
-    FRENCH = "French"
-    GERMAN = "German"
-    SPANISH = "Spanish"
-    ITALIAN = "Italian"
-
-
-class Condition(StrEnum):
-    MINT = "M"
-    NEAR_MINT = "NM"
-    EXCELLENT = "EX"
-    GOOD = "GD"
-    LIGHT_PLAYED = "LP"
-    PLAYED = "PL"
-    POOR = "PO"
-
-
-class Rarity(StrEnum):
-    COMMON = "C"
-    RARE = "R"
-    SUPER_RARE = "SR"
-    ULTRA_RARE = "UR"
-    ULTIMATE_RARE = "UtR"
-    SECRET_RARE = "ScR"
-    STARLIGHT_RARE = "SLR"
-    GHOST_RARE = "GR"
-    SPECIAL = "Special"
-
-
-class RareColor(StrEnum):
-    BLUE = auto()
-    GREEN = auto()
-    GOLD = auto()
-    SILVER = auto()
+from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
 
 
 @dataclass
