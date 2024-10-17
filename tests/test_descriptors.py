@@ -1,6 +1,7 @@
 
+import enum
 import pytest
-from cardmarketwatch.descriptors import UpperString
+from cardmarketwatch.descriptors import UpperString, OneOf
 
 
 def test_upper_string_fails_when_assigned_non_string():
@@ -29,3 +30,22 @@ def test_upper_string_works_for_multiple_attribute_assignments():
     instance.string = "leather pants"
     expected = "LEATHER PANTS"
     assert instance.string == expected
+
+
+def test_one_of():
+    class Letter(enum.StrEnum):
+        A = "a"
+        B = "b"
+        C = "c"
+
+    class C:
+        letter = OneOf(Letter, default=Letter.A)
+
+    instance = C()
+    assert instance.letter is Letter.A
+    instance.letter = None
+    assert instance.letter is None
+    instance.letter = "b"
+    instance.letter is Letter.B
+    with pytest.raises(ValueError):
+        instance.letter = "d"

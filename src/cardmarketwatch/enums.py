@@ -48,6 +48,9 @@ class AliasedStrEnum(StrEnum):
 
     @classmethod
     def _missing_(cls, string):
+        if string is None:
+            return None
+
         aliases = cls._get_aliases()
         aliases = {
             instance: aliases.get(instance, []) + [instance.lower()]

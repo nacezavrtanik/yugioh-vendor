@@ -2,7 +2,7 @@
 from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
 from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
-from cardmarketwatch.descriptors import UpperString
+from cardmarketwatch.descriptors import UpperString, OneOf
 
 
 @dataclass
@@ -10,14 +10,14 @@ class Single:
     name: str
     set: UpperString
     _: KW_ONLY
-    language: Language = Language.ENGLISH
-    condition: Condition = Condition.NEAR_MINT
+    language: OneOf = OneOf(Language, default=Language.ENGLISH)
+    condition: OneOf = OneOf(Condition, default=Condition.NEAR_MINT)
     first_edition: bool = False
     signed: bool = False
     altered: bool = False
     version: int = None
-    rarity: Rarity = None
-    rare_color: RareColor = None
+    rarity: OneOf = OneOf(Rarity, default=None)
+    rare_color: OneOf = OneOf(RareColor, default=None)
     product_page: str = None
     articles: list[Article] = None
 
