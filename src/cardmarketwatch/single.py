@@ -2,12 +2,13 @@
 from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
 from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
+from cardmarketwatch.descriptors import UpperString
 
 
 @dataclass
 class Single:
     name: str
-    set: str
+    set: UpperString
     _: KW_ONLY
     language: Language = Language.ENGLISH
     condition: Condition = Condition.NEAR_MINT
