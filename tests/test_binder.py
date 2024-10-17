@@ -4,6 +4,7 @@ import pytest
 from cardmarketwatch import Binder, Single
 from cardmarketwatch.single import Language, Condition, Rarity, RareColor
 from cardmarketwatch.binder import CSVField
+from cardmarketwatch.exceptions import CSVProcessingError
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
@@ -153,4 +154,28 @@ def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
     file.write(content)
 
     with pytest.raises(TypeError):
+        Binder.from_csv(file)
+
+
+def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
+    content = (
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Tatsunoko,,English,NM,yes,,,Version 2,,,\n"
+    )
+    file = tmpdir.mkdir("sub").join("tmp.csv")
+    file.write(content)
+
+    with pytest.raises(CSVProcessingError):
+        Binder.from_csv(file)
+
+
+def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
+    content = (
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Tatsunoko,,English,NM,,,False,,,,\n"
+    )
+    file = tmpdir.mkdir("sub").join("tmp.csv")
+    file.write(content)
+
+    with pytest.raises(CSVProcessingError):
         Binder.from_csv(file)

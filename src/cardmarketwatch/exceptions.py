@@ -1,7 +1,11 @@
 
-class MarketwatchError(Exception):
-    """Base exception for the marketwatch library"""
+class CardmarketwatchError(Exception):
+    """Base exception for the cardmarketwatch library"""
 
 
-class ProductPageNotFoundError(MarketwatchError):
+class CSVProcessingError(CardmarketwatchError):
+    pass
+
+
+class ProductPageNotFoundError(CardmarketwatchError):
     pass

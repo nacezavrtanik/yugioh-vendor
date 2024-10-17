@@ -2,24 +2,42 @@
 import csv
 from cardmarketwatch.single import Single
 from cardmarketwatch.enums import CSVField
+from cardmarketwatch.exceptions import CSVProcessingError
 
 
 def _process(row):
     processed_row = {}
     for key, value in row.items():
+        if value == "":
+            continue
         try:
             field = CSVField(key)
         except ValueError:
             continue
 
         if field.is_string:
-            if value != "":
-                processed_row[field.as_arg()] = value
+            processed_value = value
         elif field.is_integer:
-            if value != "":
-                processed_row[field.as_arg()] = int(value)
+            try:
+                processed_value = int(value)
+            except ValueError:
+                csv_error = CSVProcessingError(
+                    f"invalid value '{value}' for field '{field}'; "
+                    f"must be integer or empty",
+                )
+                raise csv_error from None
         elif field.is_boolean:
-            processed_row[field.as_arg()] = False if value == "" else True
+            if value.lower() == "yes":
+                processed_value = True
+            elif value.lower() == "no":
+                processed_value = False
+            else:
+                csv_error = CSVProcessingError(
+                    f"invalid value '{value}' for field '{field}'; "
+                    f"must be 'yes', 'no', or empty",
+                )
+                raise csv_error from None
+        processed_row[field.as_arg()] = processed_value
 
     return processed_row
 
