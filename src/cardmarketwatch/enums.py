@@ -69,6 +69,9 @@ class Language(AliasedStrEnum):
     GERMAN = "German"
     SPANISH = "Spanish"
     ITALIAN = "Italian"
+    PORTUGUESE = "Portuguese"
+    JAPANESE = "Japanese"
+    KOREAN = "Korean"
 
     @classmethod
     def _get_aliases(cls):
@@ -78,6 +81,9 @@ class Language(AliasedStrEnum):
             cls.GERMAN: ["de", "deu", "ger"],
             cls.SPANISH: ["es", "spa"],
             cls.ITALIAN: ["it", "ita"],
+            cls.PORTUGUESE: ["pt", "por"],
+            cls.JAPANESE: ["ja", "jpn"],
+            cls.KOREAN: ["ko", "kor"],
         }
 
 
