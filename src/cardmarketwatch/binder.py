@@ -65,12 +65,12 @@ class Binder(list):
             "Krebons,DL09,,GD,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
             '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
         )
-        with open(filepath, "w") as file:
+        with open(filepath, "w", encoding="utf-8") as file:
             file.write(content)
 
     @classmethod
     def from_csv(cls, filepath):
-        with open(filepath, newline="") as file:
+        with open(filepath, "r", newline="") as file:
             return cls(Single(**_process(row)) for row in csv.DictReader(file))
 
     def to_csv(self, filepath):
