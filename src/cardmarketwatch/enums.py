@@ -86,6 +86,17 @@ class Language(AliasedStrEnum):
             cls.KOREAN: ["ko", "kor"],
         }
 
+    @property
+    def cardmarket_id(self):
+        ids = {
+            Language.ENGLISH: 1,
+            Language.FRENCH: 2,
+            Language.GERMAN: 3,
+            Language.SPANISH: 4,
+            Language.ITALIAN: 5,
+        }
+        return ids.get(self)
+
 
 class Condition(AliasedStrEnum):
     MINT = "M"
@@ -107,6 +118,19 @@ class Condition(AliasedStrEnum):
             cls.PLAYED: ["played"],
             cls.POOR: ["poor"],
         }
+
+    @property
+    def cardmarket_id(self):
+        ids = {
+            Condition.MINT: 1,
+            Condition.NEAR_MINT: 2,
+            Condition.EXCELLENT: 3,
+            Condition.GOOD: 4,
+            Condition.LIGHT_PLAYED: 5,
+            Condition.PLAYED: 6,
+            Condition.POOR: None,
+        }
+        return ids.get(self)
 
 
 class Rarity(AliasedStrEnum):

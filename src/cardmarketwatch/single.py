@@ -27,22 +27,6 @@ class Single:
         "MRL",
         "SRL",
     ]
-    LANGUAGE_NUMBERS = {
-        Language.ENGLISH: 1,
-        Language.FRENCH: 2,
-        Language.GERMAN: 3,
-        Language.SPANISH: 4,
-        Language.ITALIAN: 5,
-    }
-    CONDITION_NUMBERS = {
-        Condition.MINT: 1,
-        Condition.NEAR_MINT: 2,
-        Condition.EXCELLENT: 3,
-        Condition.GOOD: 4,
-        Condition.LIGHT_PLAYED: 5,
-        Condition.PLAYED: 6,
-        Condition.POOR: None,
-    }
 
     def __str__(self):
         return f"{self.name} ({self.set})"
@@ -52,11 +36,10 @@ class Single:
         if self.product_page is None:
             return self.product_page
 
-        language_filter = f"language={self.LANGUAGE_NUMBERS.get(self.language)}"
+        language_filter = f"language={self.language.cardmarket_id}"
         filters = [language_filter]
         if self.condition != "PO":
-            condition_number = self.CONDITION_NUMBERS.get(self.condition)
-            condition_filter = f"minCondition={condition_number}"
+            condition_filter = f"minCondition={self.condition.cardmarket_id}"
             filters.append(condition_filter)
         if self.signed is True:
             signed_filter = "isSigned=Y"
