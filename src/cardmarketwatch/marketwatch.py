@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from cardmarketwatch.article import Article
 from cardmarketwatch.price import Price
-from cardmarketwatch.single import RareColor
 from cardmarketwatch.binder import Binder
 from cardmarketwatch.exceptions import ProductPageNotFoundError
 
@@ -15,12 +14,6 @@ class Marketwatch:
         "?searchString={search_term}"
         "&site={site_number}"
     )
-    DUELIST_LEAGUE_VERSION_MAPPING = {
-        RareColor.BLUE: 1,
-        RareColor.GREEN: 2,
-        RareColor.GOLD: 3,
-        RareColor.SILVER: 4,
-    }
 
     def __init__(
         self,
@@ -38,9 +31,7 @@ class Marketwatch:
 
     def _get_single_name_for_version(self, single):
         if single.set_is_duelist_league:
-            number = self.DUELIST_LEAGUE_VERSION_MAPPING.get(single.version)
-            assert number
-            suffix = f" (V.{number} - Rare)"
+            suffix = f" (V.{single.version} - Rare)"
             name = single.name + suffix
         elif single.set_requires_language_code:
             assert single.version

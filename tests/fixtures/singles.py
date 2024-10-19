@@ -6,12 +6,12 @@ from cardmarketwatch.single import Language
 
 @pytest.fixture()
 def mrd_mirror_force():
-    return Single("Mirror Force", "MRD")
+    return Single("Mirror Force", "MRD", version=3)
 
 
 @pytest.fixture()
 def dl_krebons():
-    return Single("Krebons", "DL09", version="green")
+    return Single("Krebons", "DL09", rare_color="green")
 
 
 @pytest.fixture()
@@ -38,7 +38,7 @@ def lob_dark_magician():
         language=Language.ENGLISH,
         condition="NM",
         first_edition="1st Edition",
-        version="EN",
+        version=None,
         altered=False,
         signed=False,
     )

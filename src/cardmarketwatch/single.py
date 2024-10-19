@@ -3,6 +3,7 @@ from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
 from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
 from cardmarketwatch.descriptors import UpperString, OneOf
+from cardmarketwatch.version import Version
 
 
 @dataclass
@@ -15,7 +16,7 @@ class Single:
     first_edition: bool = False
     signed: bool = False
     altered: bool = False
-    version: int = None
+    version: Version = Version()
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
     product_page: str = None
