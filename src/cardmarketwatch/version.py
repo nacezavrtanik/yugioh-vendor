@@ -9,6 +9,12 @@ class Version:
         RareColor.GOLD: 3,
         RareColor.SILVER: 4,
     }
+    LANGUAGE_CODE_SETS = [
+        "LOB",
+        "MRD",
+        "MRL",
+        "SRL",
+    ]
 
     def __set_name__(self, owner, name):
         self.private_name = "_" + name
@@ -31,6 +37,12 @@ class Version:
         return version
 
     def infer_from_single(self, single):
-        if single.set_is_duelist_league:
+        if self._set_is_duelist_league(single):
             return self.DUELIST_LEAGUE_VERSION_MAPPING.get(single.rare_color)
         return None
+
+    def _set_requires_language_code(self, single):
+        return single.set in self.LANGUAGE_CODE_SETS
+
+    def _set_is_duelist_league(self, single):
+        return single.set is not None and single.set.startswith("DL")

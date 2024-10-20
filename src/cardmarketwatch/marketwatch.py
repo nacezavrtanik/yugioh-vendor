@@ -30,11 +30,9 @@ class Marketwatch:
         )
 
     def _get_single_name_for_version(self, single):
-        if single.set_is_duelist_league:
-            suffix = f" (V.{single.version} - Rare)"
+        if single.version is not None:
+            suffix = f" (V.{single.version} - Rare)"  # only DL for now
             name = single.name + suffix
-        elif single.set_requires_language_code:
-            assert single.version
         else:
             name = single.name
         return name

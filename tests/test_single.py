@@ -1,6 +1,5 @@
 
 import pytest
-from fixtures.singles import mrd_mirror_force, dl_krebons
 from cardmarketwatch import Single
 from cardmarketwatch.single import Language, Condition
 from cardmarketwatch.article import Article
@@ -91,19 +90,3 @@ def test_filtered_product_page_all_filters():
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Stardust-Overdrive/Dark-Rabbit?language=4&minCondition=3&isSigned=Y&isFirstEd=Y&isAltered=Y"
     assert single.filtered_product_page == expected
-
-
-def test_set_is_duelist_league_is_true(dl_krebons):
-    assert dl_krebons.set_is_duelist_league
-
-
-def test_set_is_duelist_league_is_false(mrd_mirror_force):
-    assert not mrd_mirror_force.set_is_duelist_league
-
-
-def test_set_requires_language_code_is_true(mrd_mirror_force):
-    assert mrd_mirror_force.set_requires_language_code
-
-
-def test_set_requires_language_code_is_false(dl_krebons):
-    assert not dl_krebons.set_requires_language_code
