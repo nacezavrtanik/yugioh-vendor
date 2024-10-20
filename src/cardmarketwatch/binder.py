@@ -5,41 +5,43 @@ from cardmarketwatch.enums import CSVField
 from cardmarketwatch.exceptions import CSVProcessingError
 
 
-def _process(row):
-    processed_row = {}
-    for key, value in row.items():
-        if value == "":
-            continue
-        try:
-            field = CSVField(key)
-        except ValueError:
-            continue
-
-        if field.is_string:
-            processed_value = value
-        elif field.is_integer:
+def _process(dict_reader):
+    for row in dict_reader:
+        processed_row = {}
+        for key, value in row.items():
+            if value == "":
+                continue
             try:
-                processed_value = int(value)
+                field = CSVField(key)
             except ValueError:
-                csv_error = CSVProcessingError(
-                    f"invalid value '{value}' for field '{field}'; "
-                    f"must be integer or empty",
-                )
-                raise csv_error from None
-        elif field.is_boolean:
-            if value.lower() == "yes":
-                processed_value = True
-            elif value.lower() == "no":
-                processed_value = False
-            else:
-                csv_error = CSVProcessingError(
-                    f"invalid value '{value}' for field '{field}'; "
-                    f"must be 'yes', 'no', or empty",
-                )
-                raise csv_error from None
-        processed_row[field.as_arg()] = processed_value
+                continue
 
-    return processed_row
+            if field.is_string:
+                processed_value = value
+            elif field.is_integer:
+                try:
+                    processed_value = int(value)
+                except ValueError:
+                    csv_error = CSVProcessingError(
+                        f"invalid value '{value}' for field '{field}'; "
+                        f"must be integer or empty",
+                    )
+                    raise csv_error from None
+            elif field.is_boolean:
+                if value.lower() == "yes":
+                    processed_value = True
+                elif value.lower() == "no":
+                    processed_value = False
+                else:
+                    csv_error = CSVProcessingError(
+                        f"invalid value '{value}' for field '{field}'; "
+                        f"must be 'yes', 'no', or empty",
+                    )
+                    raise csv_error from None
+            processed_row[field.as_arg()] = processed_value
+
+        if processed_row:
+            yield processed_row
 
 
 def _validate(iterable):
@@ -71,7 +73,7 @@ class Binder(list):
     @classmethod
     def from_csv(cls, filepath):
         with open(filepath, "r", newline="") as file:
-            return cls(Single(**_process(row)) for row in csv.DictReader(file))
+            return cls(Single(**row) for row in _process(csv.DictReader(file)))
 
     def to_csv(self, filepath):
         """Save singles in binder to CSV, account for articles."""
