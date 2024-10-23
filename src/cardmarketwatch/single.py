@@ -2,20 +2,20 @@
 from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
 from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
-from cardmarketwatch.descriptors import UpperString, OneOf
+from cardmarketwatch.descriptors import UpperString, OneOf, EnforcedType
 from cardmarketwatch.version import Version
 
 
 @dataclass
 class Single:
-    name: str
+    name: EnforcedType = EnforcedType(str)
     set: UpperString = UpperString()
     _: KW_ONLY
     language: OneOf = OneOf(Language, default=Language.ENGLISH)
     condition: OneOf = OneOf(Condition, default=Condition.NEAR_MINT)
-    first_edition: bool = False
-    signed: bool = False
-    altered: bool = False
+    first_edition: EnforcedType = EnforcedType(bool, default=False)
+    signed: EnforcedType = EnforcedType(bool, default=False)
+    altered: EnforcedType = EnforcedType(bool, default=False)
     version: Version = Version()
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
