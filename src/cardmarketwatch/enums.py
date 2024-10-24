@@ -50,6 +50,8 @@ class AliasedStrEnum(StrEnum):
     def _missing_(cls, string):
         if string is None:
             return None
+        if not isinstance(string, str):
+            raise TypeError
 
         aliases = cls._get_aliases()
         aliases = {

@@ -2,24 +2,25 @@
 from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
 from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
-from cardmarketwatch.descriptors import UpperString, OneOf, EnforcedType
-from cardmarketwatch.version import Version
+from cardmarketwatch.descriptors import (
+    Version, OneOf, Bool, String, UpperString, StringOrNone
+)
 
 
 @dataclass
 class Single:
-    name: EnforcedType = EnforcedType(str)
+    name: String = String()
     set: UpperString = UpperString()
     _: KW_ONLY
     language: OneOf = OneOf(Language, default=Language.ENGLISH)
     condition: OneOf = OneOf(Condition, default=Condition.NEAR_MINT)
-    first_edition: EnforcedType = EnforcedType(bool, default=False)
-    signed: EnforcedType = EnforcedType(bool, default=False)
-    altered: EnforcedType = EnforcedType(bool, default=False)
+    first_edition: Bool = Bool(default=False)
+    signed: Bool = Bool(default=False)
+    altered: Bool = Bool(default=False)
     version: Version = Version()
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
-    product_page: str = None
+    product_page: StringOrNone = StringOrNone(default=None)
     articles: list[Article] = None
 
     def __str__(self):

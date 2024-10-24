@@ -1,7 +1,17 @@
 
 import pytest
-from cardmarketwatch.version import Version
+from cardmarketwatch.descriptors import Version
 from fixtures.singles import dl_krebons, mrd_mirror_force
+
+
+def test_instantiation_succeeds_with_integer_value():
+    class C:
+        version = Version
+        set = "MRL"
+        def __init__(self, version):
+            self.version = version
+    instance = C(3)
+    assert instance.version == 3
 
 
 def test_instantiation_succeeds_with_none_as_default_value():
@@ -10,6 +20,16 @@ def test_instantiation_succeeds_with_none_as_default_value():
         set = "LOB"
     instance = C()
     assert instance.version is None
+
+
+def test_instantiation_fails_with_non_integer_non_none_value():
+    class C:
+        version = Version()
+        set = "MRL"
+        def __init__(self, version):
+            self.version = version
+    with pytest.raises(TypeError):
+        C("123")
 
 
 def test_assignment_succeeds_for_int_and_none():
