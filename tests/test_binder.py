@@ -33,6 +33,8 @@ def test_create_csv_template(tmpdir):
     file = subdir/"template.csv"
     Binder.create_csv_template(file)
     assert os.listdir(subdir) == ["template.csv"]
+    binder = Binder.from_csv(file)
+    assert binder[0] == Single("Tatsunoko", "CORE")
 
 
 def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
