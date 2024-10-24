@@ -20,7 +20,7 @@ class Single:
     version: Version = Version()
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
-    product_page: StringOrNone = StringOrNone(default=None)
+    article_page: StringOrNone = StringOrNone(default=None)
     articles: list[Article] = None
 
     def __str__(self):
@@ -28,12 +28,12 @@ class Single:
 
     @property
     def url(self):
-        return self.product_page
+        return self.article_page
 
     @property
-    def filtered_product_page(self):
-        if self.product_page is None:
-            return self.product_page
+    def filtered_article_page(self):
+        if self.article_page is None:
+            return self.article_page
 
         language_filter = f"language={self.language.cardmarket_id}"
         filters = [language_filter]
@@ -50,4 +50,4 @@ class Single:
             altered_filter = "isAltered=Y"
             filters.append(altered_filter)
 
-        return self.product_page + f"?{"&".join(filters)}"
+        return self.article_page + f"?{"&".join(filters)}"

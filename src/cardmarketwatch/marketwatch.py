@@ -5,7 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 from cardmarketwatch.article import Article
 from cardmarketwatch.price import Price
 from cardmarketwatch.binder import Binder
-from cardmarketwatch.exceptions import ProductPageNotFoundError
+from cardmarketwatch.exceptions import ArticlePageNotFoundError
 
 
 class Marketwatch:
@@ -37,7 +37,7 @@ class Marketwatch:
             name = single.name
         return name
 
-    def _lookup_product_page_for_single(self, driver, single):
+    def _lookup_article_page_for_single(self, driver, single):
         page_count = count(1)
         results_xpath = "//div[@class='table-body']/div"
         set_xpath = "./div[3]"
@@ -59,10 +59,10 @@ class Marketwatch:
                     name = name_element.text
                     name_for_version = self._get_single_name_for_version(single)
                     if name == name_for_version:
-                        product_page = name_element.get_attribute("href")
+                        article_page = name_element.get_attribute("href")
                         print("!!!", repr(single))
-                        print("FOUND", product_page)
-                        single.product_page = product_page
+                        print("FOUND", article_page)
+                        single.article_page = article_page
                         return
                     else:
                         print(" * ", repr(single))
@@ -71,7 +71,7 @@ class Marketwatch:
                     raise ProductPageNotFoundError("last results page reached")
 
     def _lookup_articles_for_single(self, driver, single, max_articles):
-        driver.get(single.filtered_product_page)
+        driver.get(single.filtered_article_page)
 
         articles = []
         article_xpath = "//div[@class='row g-0 article-row']"
@@ -110,12 +110,12 @@ class Marketwatch:
 
     def lookup_single(self, single, max_articles=3):
         with self.driver_context_manager() as driver:
-            self._lookup_product_page_for_single(driver, single)
+            self._lookup_article_page_for_single(driver, single)
             self._lookup_articles_for_single(driver, single, max_articles)
 
     def lookup_binder(self, binder, max_articles=3):
         """Add n lowest articles to each single in binder."""
         with self.driver_context_manager() as driver:
             for single in binder:
-                self._lookup_product_page_for_single(driver, single)
+                self._lookup_article_page_for_single(driver, single)
                 self._lookup_articles_for_single(driver, single, max_articles)

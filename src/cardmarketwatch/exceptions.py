@@ -7,5 +7,5 @@ class CSVProcessingError(CardmarketwatchError):
     pass
 
 
-class ProductPageNotFoundError(CardmarketwatchError):
+class ArticlePageNotFoundError(CardmarketwatchError):
     pass

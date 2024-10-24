@@ -2,8 +2,9 @@
 import os
 import pytest
 from cardmarketwatch import Binder, Single
-from cardmarketwatch.single import Language, Condition, Rarity, RareColor
-from cardmarketwatch.binder import CSVField
+from cardmarketwatch.enums import (
+    CSVField, Language, Condition, Rarity, RareColor
+)
 from cardmarketwatch.exceptions import CSVProcessingError
 
 
@@ -36,7 +37,7 @@ def test_create_csv_template(tmpdir):
 
 def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page\n"
         "Tatsunoko,core,english,NM,yes,,,,,,\n"
         "Krebons,DL09,,good,,yes,,1,Rare,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
         '"Brionac, Dragon of the Ice Barrier",ha01,FRA,,,,yes,,ScR,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier\n'
@@ -60,7 +61,7 @@ def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
             version=1,
             rarity=Rarity.RARE,
             rare_color=RareColor.BLUE,
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(
             "Brionac, Dragon of the Ice Barrier",
@@ -68,7 +69,7 @@ def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
             language=Language.FRENCH,
             altered=True,
             rarity="ScR",
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
     assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
@@ -107,7 +108,7 @@ def test_instantiation_from_csv_succeeds_for_some_fields(tmpdir):
 
 def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page,THIS IS A REDUNDANT FIELD\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page,THIS IS A REDUNDANT FIELD\n"
         "Tatsunoko,CORE,English,NM,yes,,,,,,,123456789\n"
         "Krebons,DL09,,gd,,yes,,1,R,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare,BLA\n"
         '"Brionac, Dragon of the Ice Barrier",HA01,French,,,,yes,,scr,,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier,\n'
@@ -131,7 +132,7 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
             version=1,
             rarity=Rarity.RARE,
             rare_color=RareColor.BLUE,
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(
             "Brionac, Dragon of the Ice Barrier",
@@ -139,7 +140,7 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
             language=Language.FRENCH,
             altered=True,
             rarity="secret rare",
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
     assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
@@ -147,7 +148,7 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
 
 def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page\n"
         "Tatsunoko,core,english,NM,yes,,,,,,\n"
         ",,,,,,,,,,\n"
         "Krebons,DL09,,good,,yes,,1,Rare,blue,https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare\n"
@@ -173,7 +174,7 @@ def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
             version=1,
             rarity=Rarity.RARE,
             rare_color=RareColor.BLUE,
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
         Single(
             "Brionac, Dragon of the Ice Barrier",
@@ -181,7 +182,7 @@ def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
             language=Language.FRENCH,
             altered=True,
             rarity="ScR",
-            product_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
+            article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
     assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
@@ -189,7 +190,7 @@ def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
 
 def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page\n"
         "Tatsunoko,,English,NM,yes,,,,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")
@@ -201,7 +202,7 @@ def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
 
 def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page\n"
         "Tatsunoko,,English,NM,yes,,,Version 2,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")
@@ -213,7 +214,7 @@ def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
 
 def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
     content = (
-        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Product Page\n"
+        "Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Article Page\n"
         "Tatsunoko,,English,NM,,,False,,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")

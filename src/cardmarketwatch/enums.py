@@ -13,7 +13,7 @@ class CSVField(StrEnum):
     VERSION = "Version"
     RARITY = "Rarity"
     RARE_COLOR = "Rare Color"
-    PRODUCT_PAGE = "Product Page"
+    PRODUCT_PAGE = "Article Page"
 
     @property
     def is_string(self):
