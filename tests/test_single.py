@@ -1,7 +1,7 @@
 
 import pytest
 from cardmarketwatch import Single
-from cardmarketwatch.single import Language, Condition
+from cardmarketwatch.enums import Language, Condition, LanguageCode
 from cardmarketwatch.article import Article
 
 
@@ -13,6 +13,7 @@ def test_instantiation_succeeds_for_only_keyword_args():
         language=Language.SPANISH,
         condition=Condition.MINT,
         first_edition=True,
+        language_code="E",
     )
 
 
@@ -24,6 +25,7 @@ def test_instantiation_succeeds_for_positional_name_set_and_keyword_args():
         language=Language.SPANISH,
         condition=Condition.MINT,
         first_edition=True,
+        language_code=LanguageCode.E,
     )
 
 

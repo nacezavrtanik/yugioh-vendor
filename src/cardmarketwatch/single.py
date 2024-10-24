@@ -1,7 +1,9 @@
 
 from dataclasses import dataclass, KW_ONLY
 from cardmarketwatch.article import Article
-from cardmarketwatch.enums import Language, Condition, Rarity, RareColor
+from cardmarketwatch.enums import (
+    Language, Condition, Rarity, RareColor, LanguageCode
+)
 from cardmarketwatch.descriptors import (
     Version, OneOf, Bool, String, UpperString, StringOrNone
 )
@@ -20,6 +22,7 @@ class Single:
     version: Version = Version()
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
+    language_code: OneOf = OneOf(LanguageCode, default=None)
     article_page: StringOrNone = StringOrNone(default=None)
     articles: list[Article] = None
 

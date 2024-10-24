@@ -1,5 +1,5 @@
 
-from enum import StrEnum, auto
+from enum import StrEnum
 
 
 class CSVField(StrEnum):
@@ -13,7 +13,8 @@ class CSVField(StrEnum):
     VERSION = "Version"
     RARITY = "Rarity"
     RARE_COLOR = "Rare Color"
-    PRODUCT_PAGE = "Article Page"
+    LANGUAGE_CODE = "Language Code"
+    ARTICLE_PAGE = "Article Page"
 
     @property
     def is_string(self):
@@ -24,7 +25,8 @@ class CSVField(StrEnum):
             self.CONDITION,
             self.RARITY,
             self.RARE_COLOR,
-            self.PRODUCT_PAGE,
+            self.LANGUAGE_CODE,
+            self.ARTICLE_PAGE,
         ]
 
     @property
@@ -169,3 +171,23 @@ class RareColor(AliasedStrEnum):
     @classmethod
     def _get_aliases(cls):
         return {}
+
+
+class LanguageCode(AliasedStrEnum):
+    A = "-A"
+    E = "-E"
+    EN = "-EN"
+    F = "-F"
+    G = "-G"
+    NONE = "-"
+
+    @classmethod
+    def _get_aliases(cls):
+        return {
+            cls.A: ["australian", "a"],
+            cls.EN: ["english", "en"],
+            cls.E: ["spanish", "e"],
+            cls.G: ["german", "g"],
+            cls.F: ["french", "f"],
+            cls.NONE: ["american", "none"],
+        }

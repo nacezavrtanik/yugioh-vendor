@@ -1,6 +1,8 @@
 
 import pytest
-from cardmarketwatch.enums import CSVField, Language, Condition, Rarity, RareColor
+from cardmarketwatch.enums import (
+    CSVField, Language, Condition, Rarity, RareColor, LanguageCode
+)
 
 
 def test_each_csv_field_has_exactly_one_specified_type():
@@ -27,6 +29,9 @@ def test__csv_field_as_arg():
     ("ultra rare", Rarity.ULTRA_RARE),
     ("blue", RareColor.BLUE),
     ("Green", RareColor.GREEN),
+    ("-en", LanguageCode.EN),
+    ("german", LanguageCode.G),
+    ("f", LanguageCode.F),
 ])
 def test_aliased_str_enum_works_for_valid_aliases(string, enum_instance):
     assert type(enum_instance)(string) is enum_instance
@@ -37,6 +42,7 @@ def test_aliased_str_enum_works_for_valid_aliases(string, enum_instance):
     ("gud", Condition),
     ("oltra rare", Rarity),
     ("bloo", RareColor),
+    ("murrican", LanguageCode)
 ])
 def test_aliased_str_enum_instantiation_fails_for_invalid_aliases(
     string, enum_cls
