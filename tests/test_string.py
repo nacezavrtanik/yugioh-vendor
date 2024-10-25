@@ -1,6 +1,6 @@
 
 import pytest
-from cardmarketwatch.descriptors import String, UpperString, StringOrNone
+from vendor.descriptors import String, UpperString, StringOrNone
 
 
 def test_string_instantiation_succeeds_for_string_value():

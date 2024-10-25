@@ -1,5 +1,5 @@
 
-from cardmarketwatch.enums import RareColor
+from vendor.enums import RareColor
 
 
 class Version:

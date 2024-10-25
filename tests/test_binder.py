@@ -1,40 +1,37 @@
 
 import os
 import pytest
-from cardmarketwatch import Binder, Single
-from cardmarketwatch.enums import (
-    CSVField, Language, Condition, Rarity, RareColor, LanguageCode
-)
-from cardmarketwatch.exceptions import CSVProcessingError
+import vendor as vd
+from vendor.exceptions import CSVProcessingError
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
     singles = [
-        Single("Gemini Elf", "LON", condition=Condition.LIGHT_PLAYED),
-        Single("Beast of Talwar", "lod", first_edition=True),
+        vd.Single("Gemini Elf", "LON", condition=vd.Condition.LIGHT_PLAYED),
+        vd.Single("Beast of Talwar", "lod", first_edition=True),
     ]
-    Binder(singles)
-    Binder(tuple(singles))
-    Binder(single for single in singles)
+    vd.Binder(singles)
+    vd.Binder(tuple(singles))
+    vd.Binder(single for single in singles)
 
 
 def test_instantiation_fails_for_list_of_non_singles():
     non_singles = [
-        Single("Ryu-Kishin", "LOB"),
+        vd.Single("Ryu-Kishin", "LOB"),
         ("Aqua Madoor", "LOB"),
     ]
     with pytest.raises(TypeError):
-        Binder(non_singles)
+        vd.Binder(non_singles)
 
 
 def test_create_csv_template(tmpdir):
     subdir = tmpdir.mkdir("sub")
     assert os.listdir(subdir) == []
     file = subdir/"template.csv"
-    Binder.create_csv_template(file)
+    vd.Binder.create_csv_template(file)
     assert os.listdir(subdir) == ["template.csv"]
-    binder = Binder.from_csv(file)
-    assert binder[0] == Single("Tatsunoko", "CORE")
+    binder = vd.Binder.from_csv(file)
+    assert binder[0] == vd.Single("Tatsunoko", "CORE")
 
 
 def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
@@ -47,35 +44,35 @@ def test_instantiation_from_csv_succeeds_for_all_fields(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    expected = Binder([
-        Single(
+    expected = vd.Binder([
+        vd.Single(
             "Tatsunoko",
             "CORE",
             language="English",
             condition="NM",
             first_edition=True,
         ),
-        Single(
+        vd.Single(
             "Krebons",
             "DL09",
-            condition=Condition.GOOD,
+            condition=vd.Condition.GOOD,
             signed=True,
             version=1,
-            rarity=Rarity.RARE,
-            rare_color=RareColor.BLUE,
-            language_code=LanguageCode.EN,
+            rarity=vd.Rarity.RARE,
+            rare_color=vd.RareColor.BLUE,
+            language_code=vd.LanguageCode.EN,
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
-        Single(
+        vd.Single(
             "Brionac, Dragon of the Ice Barrier",
             "HA01",
-            language=Language.FRENCH,
+            language=vd.Language.FRENCH,
             altered=True,
             rarity="ScR",
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+    assert vd.Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
 
 
 def test_instantiation_from_csv_succeeds_for_some_fields(tmpdir):
@@ -88,25 +85,25 @@ def test_instantiation_from_csv_succeeds_for_some_fields(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    expected = Binder([
-        Single(
+    expected = vd.Binder([
+        vd.Single(
             "Tatsunoko",
             "CORE",
             language="English",
             condition="NM",
         ),
-        Single(
+        vd.Single(
             "Krebons",
             "DL09",
-            condition=Condition.GOOD,
+            condition=vd.Condition.GOOD,
         ),
-        Single(
+        vd.Single(
             "Brionac, Dragon of the Ice Barrier",
             "HA01",
             language="fr",
         ),
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+    assert vd.Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
 
 
 def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
@@ -119,8 +116,8 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    expected = Binder([
-        Single(
+    expected = vd.Binder([
+        vd.Single(
             "Tatsunoko",
             "CORE",
             language="English",
@@ -128,26 +125,26 @@ def test_instantiation_from_csv_succeeds_for_redundant_fields(tmpdir):
             first_edition=True,
             language_code="-a",
         ),
-        Single(
+        vd.Single(
             "Krebons",
             "DL09",
-            condition=Condition.GOOD,
+            condition=vd.Condition.GOOD,
             signed=True,
             version=1,
-            rarity=Rarity.RARE,
-            rare_color=RareColor.BLUE,
+            rarity=vd.Rarity.RARE,
+            rare_color=vd.RareColor.BLUE,
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
-        Single(
+        vd.Single(
             "Brionac, Dragon of the Ice Barrier",
             "HA01",
-            language=Language.FRENCH,
+            language=vd.Language.FRENCH,
             altered=True,
             rarity="secret rare",
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
         ),
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+    assert vd.Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
 
 
 def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
@@ -162,35 +159,35 @@ def test_instantiation_from_csv_succeeds_for_empty_rows(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    expected = Binder([
-        Single(
+    expected = vd.Binder([
+        vd.Single(
             "Tatsunoko",
             "CORE",
             language="English",
             condition="NM",
             first_edition=True,
         ),
-        Single(
+        vd.Single(
             "Krebons",
             "DL09",
-            condition=Condition.GOOD,
+            condition=vd.Condition.GOOD,
             signed=True,
             version=1,
-            rarity=Rarity.RARE,
-            rare_color=RareColor.BLUE,
+            rarity=vd.Rarity.RARE,
+            rare_color=vd.RareColor.BLUE,
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-League-09/Krebons-V1-Rare",
         ),
-        Single(
+        vd.Single(
             "Brionac, Dragon of the Ice Barrier",
             "HA01",
-            language=Language.FRENCH,
+            language=vd.Language.FRENCH,
             altered=True,
             rarity="ScR",
             article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Hidden-Arsenal/Brionac-Dragon-of-the-Ice-Barrier",
             language_code="american",
         ),
     ])
-    assert Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
+    assert vd.Binder.from_csv(tmpdir/"sub"/"tmp.csv") == expected
 
 
 def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
@@ -202,7 +199,7 @@ def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
     file.write(content)
 
     with pytest.raises(TypeError):
-        Binder.from_csv(file)
+        vd.Binder.from_csv(file)
 
 
 def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
@@ -214,7 +211,7 @@ def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
     file.write(content)
 
     with pytest.raises(CSVProcessingError):
-        Binder.from_csv(file)
+        vd.Binder.from_csv(file)
 
 
 def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
@@ -226,4 +223,4 @@ def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
     file.write(content)
 
     with pytest.raises(CSVProcessingError):
-        Binder.from_csv(file)
+        vd.Binder.from_csv(file)

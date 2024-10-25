@@ -8,8 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
-from cardmarketwatch import Marketwatch, Single, Binder
-import cardmarketwatch.config as cfg
+import vendor as vd
 
 
 def _system_is_ubuntu_22_04_or_later():
@@ -51,4 +50,4 @@ def firefox_driver():
 
 @pytest.fixture()
 def marketwatch():
-    return Marketwatch(firefox)
+    return vd.Marketwatch(firefox)

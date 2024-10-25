@@ -1,6 +1,6 @@
 
 import pytest
-from cardmarketwatch.price import Price
+from vendor.price import Price
 
 
 def test_instantiation_succeeds_for_float_and_unit():

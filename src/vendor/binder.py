@@ -1,8 +1,8 @@
 
 import csv
-from cardmarketwatch.single import Single
-from cardmarketwatch.enums import CSVField
-from cardmarketwatch.exceptions import CSVProcessingError
+from vendor.single import Single
+from vendor.enums import CSVField
+from vendor.exceptions import CSVProcessingError
 
 
 def _process(dict_reader):

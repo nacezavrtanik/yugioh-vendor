@@ -1,10 +1,10 @@
 
 from dataclasses import dataclass, KW_ONLY
-from cardmarketwatch.article import Article
-from cardmarketwatch.enums import (
+from vendor.article import Article
+from vendor.enums import (
     Language, Condition, Rarity, RareColor, LanguageCode
 )
-from cardmarketwatch.descriptors import (
+from vendor.descriptors import (
     Version, OneOf, Bool, String, UpperString, StringOrNone
 )
 

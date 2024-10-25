@@ -1,26 +1,25 @@
 
 import pytest
-from cardmarketwatch import Single
-from cardmarketwatch.single import Language
+import vendor as vd
 
 
 @pytest.fixture()
 def mrd_mirror_force():
-    return Single("Mirror Force", "MRD", version=3)
+    return vd.Single("Mirror Force", "MRD", version=3)
 
 
 @pytest.fixture()
 def dl_krebons():
-    return Single("Krebons", "DL09", rare_color="green")
+    return vd.Single("Krebons", "DL09", rare_color="green")
 
 
 @pytest.fixture()
 def core_tatsunoko():
-    return Single(
+    return vd.Single(
         "Tatsunoko",
         "CORE",
         rarity="ScR",
-        language=Language.ENGLISH,
+        language=vd.Language.ENGLISH,
         condition="NM",
         first_edition=False,
         version=None,
@@ -31,12 +30,12 @@ def core_tatsunoko():
 
 @pytest.fixture()
 def lob_dark_magician():
-    return Single(
+    return vd.Single(
         "Dark Magician",
         "LOB",
         rarity="UR",
-        language=Language.ENGLISH,
-        condition="NM",
+        language=vd.Language.ENGLISH,
+        condition=vd.Condition.NEAR_MINT,
         first_edition=True,
         version=None,
         altered=False,

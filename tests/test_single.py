@@ -1,74 +1,72 @@
 
 import pytest
-from cardmarketwatch import Single
-from cardmarketwatch.enums import Language, Condition, LanguageCode
-from cardmarketwatch.article import Article
+import vendor as vd
 
 
 def test_instantiation_succeeds_for_only_keyword_args():
-    single = Single(
+    single = vd.Single(
         name="Dark Magician",
         set="SDY",
         rarity="UR",
-        language=Language.SPANISH,
-        condition=Condition.MINT,
+        language=vd.Language.SPANISH,
+        condition=vd.Condition.MINT,
         first_edition=True,
         language_code="E",
     )
 
 
 def test_instantiation_succeeds_for_positional_name_set_and_keyword_args():
-    single = Single(
+    single = vd.Single(
         "Dark Magician",
         "SDY",
         rarity="UR",
-        language=Language.SPANISH,
-        condition=Condition.MINT,
+        language=vd.Language.SPANISH,
+        condition=vd.Condition.MINT,
         first_edition=True,
-        language_code=LanguageCode.E,
+        language_code=vd.LanguageCode.E,
     )
 
 
 def test_instatiation_fails_for_positional_name_set_and_positional_args():
     with pytest.raises(TypeError):
-        single = Single(
+        single = vd.Single(
             "Dark Magician",
             "SDY",
             "UR",
-            language=Language.ENGLISH,
-            condition=Condition.MINT,
+            language=vd.Language.ENGLISH,
+            condition=vd.Condition.MINT,
             first_edition=True,
         )
 
 
 def test_instatiation_fails_for_non_string_name():
     with pytest.raises(TypeError):
-        Single(["Uraby"], "LOB")
+        vd.Single(["Uraby"], "LOB")
 
 
 def test_instantiation_fails_for_non_string_set():
     with pytest.raises(TypeError):
-        Single("Uraby", {"LOB"})
+        vd.Single("Uraby", {"LOB"})
 
 
 def test_instantiation_fails_for_non_string_language():
     with pytest.raises(TypeError):
-        Single("Uraby", "LOB", language=12)
+        vd.Single("Uraby", "LOB", language=12)
 
 
 def test_instantiation_fails_for_invalid_language():
     with pytest.raises(ValueError):
-        Single("Uraby", "LOB", language="russian")
+        vd.Single("Uraby", "LOB", language="russian")
 
 
 def test_instantiation_fails_for_non_string_condition():
     with pytest.raises(TypeError):
-        Single("Uraby", "LOB", condition=[])
+        vd.Single("Uraby", "LOB", condition=[])
 
 
 def test_instantiation_fails_for_invalid_condition():
     with pytest.raises(ValueError):
-        Single("Uraby", "LOB", condition="almost mint")
+        vd.Single("Uraby", "LOB", condition="almost mint")
 
 
 @pytest.mark.parametrize("kwargs", [
@@ -78,51 +76,51 @@ def test_instantiation_fails_for_invalid_condition():
 ])
 def test_instantiation_fails_for_non_bool_boolean_field(kwargs):
     with pytest.raises(TypeError):
-        Single("uraby", "LOB", **kwargs)
+        vd.Single("uraby", "LOB", **kwargs)
 
 
 def test_instantiation_fails_for_non_integer_version():
     with pytest.raises(TypeError):
-        Single("uraby", "lob", version="1")
+        vd.Single("uraby", "lob", version="1")
 
 
 @pytest.mark.parametrize("version_number", [0, -1])
 def test_instantiation_fails_for_invalid_version(version_number):
     with pytest.raises(ValueError):
-        Single("uraby", "lob", version=version_number)
+        vd.Single("uraby", "lob", version=version_number)
 
 
 def test_instantiation_fails_for_non_string_rarity():
     with pytest.raises(TypeError):
-        Single("uraby", "lob", rarity=False)
+        vd.Single("uraby", "lob", rarity=False)
 
 
 def test_instantiation_fails_for_invalid_rarity():
     with pytest.raises(ValueError):
-        Single("uraby", "lob", rarity="super amazing mega awesome rare")
+        vd.Single("uraby", "lob", rarity="super amazing mega awesome rare")
 
 
 def test_instantiation_fails_for_non_string_rare_color():
     with pytest.raises(TypeError):
-        Single("uraby", "lob", rare_color=[])
+        vd.Single("uraby", "lob", rare_color=[])
 
 
 def test_instantiation_fails_for_invalid_rare_color():
     with pytest.raises(ValueError):
-        Single("uraby", "lob", rare_color="infrared")
+        vd.Single("uraby", "lob", rare_color="infrared")
 
 
 def test_instantiation_fails_for_non_string_article_page():
     with pytest.raises(TypeError):
-        Single("uraby", "lob", article_page=False)
+        vd.Single("uraby", "lob", article_page=False)
 
 
 def test_filtered_article_page_when_article_page_is_none():
-    assert Single("Sangan", "MRD").filtered_article_page is None
+    assert vd.Single("Sangan", "MRD").filtered_article_page is None
 
 
 def test_filtered_article_page_default_filters():
-    single = Single(
+    single = vd.Single(
         "Stardust Dragon",
         "CT07",
         article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Collectors-Tins-2010/Stardust-Dragon",
@@ -132,10 +130,10 @@ def test_filtered_article_page_default_filters():
 
 
 def test_filtered_article_page_some_filters_example_1():
-    single = Single(
+    single = vd.Single(
         "Sangan",
         "DB2",
-        language=Language.GERMAN,
+        language=vd.Language.GERMAN,
         condition="LP",
         article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Dark-Beginning-2/Sangan",
     )
@@ -144,10 +142,10 @@ def test_filtered_article_page_some_filters_example_1():
 
 
 def test_filtered_article_page_some_filters_example_2():
-    single = Single(
+    single = vd.Single(
         "Stardust Dragon",
         "TDGS",
-        language=Language.FRENCH,
+        language=vd.Language.FRENCH,
         first_edition=True,
         article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/The-Duelist-Genesis/Stardust-Dragon-V-6",
     )
@@ -156,11 +154,11 @@ def test_filtered_article_page_some_filters_example_2():
 
 
 def test_filtered_article_page_all_filters():
-    single = Single(
+    single = vd.Single(
         "Dark Rabbit",
         "SOVR",
-        language=Language.SPANISH,
-        condition=Condition.EXCELLENT,
+        language=vd.Language.SPANISH,
+        condition=vd.Condition.EXCELLENT,
         signed=True,
         first_edition=True,
         altered=True,

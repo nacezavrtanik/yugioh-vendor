@@ -1,6 +1,6 @@
 
 import pytest
-from cardmarketwatch.descriptors.bool import Bool
+from vendor.descriptors.bool import Bool
 
 
 def test_instantiation_succeeds_for_boolean_value():

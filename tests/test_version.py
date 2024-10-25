@@ -1,6 +1,6 @@
 
 import pytest
-from cardmarketwatch.descriptors import Version
+from vendor.descriptors import Version
 from fixtures.singles import dl_krebons, mrd_mirror_force
 
 

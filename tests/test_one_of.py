@@ -1,7 +1,7 @@
 
 import enum
 import pytest
-from cardmarketwatch.descriptors import OneOf
+from vendor.descriptors import OneOf
 
 
 def test_instantiation_works_for_string_value():

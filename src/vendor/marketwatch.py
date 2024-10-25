@@ -2,10 +2,10 @@
 from itertools import count
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from cardmarketwatch.article import Article
-from cardmarketwatch.price import Price
-from cardmarketwatch.binder import Binder
-from cardmarketwatch.exceptions import ArticlePageNotFoundError
+from vendor.article import Article
+from vendor.price import Price
+from vendor.binder import Binder
+from vendor.exceptions import ArticlePageNotFoundError
 
 
 class Marketwatch:
