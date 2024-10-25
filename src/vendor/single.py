@@ -5,14 +5,14 @@ from vendor.enums import (
     Language, Condition, Rarity, RareColor, LanguageCode
 )
 from vendor.descriptors import (
-    Version, OneOf, Bool, String, UpperString, StringOrNone
+    Version, OneOf, Bool, String, StringOrNone
 )
 
 
 @dataclass(frozen=True)
 class Single:
-    name: String = String()
-    set: UpperString = UpperString()
+    name: String = String(predicate=str.title)
+    set: String = String(predicate=str.upper)
     _: KW_ONLY
     language: OneOf = OneOf(Language, default=Language.ENGLISH)
     condition: OneOf = OneOf(Condition, default=Condition.NEAR_MINT)

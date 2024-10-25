@@ -141,6 +141,24 @@ def test_instances_are_immutable(attr, value):
         setattr(single, attr, value)
 
 
+def test_equality():
+    single_1 = vd.Single(
+        "Souleater",
+        "PGD",
+        language=vd.Language.ENGLISH,
+        condition=vd.Condition.NEAR_MINT,
+        first_edition=True,
+    )
+    single_2 = vd.Single(
+        "souleater",
+        "pgd",
+        language="eng",
+        condition="nm",
+        first_edition=True,
+    )
+    assert single_1 == single_2
+
+
 def test_filtered_article_page_when_article_page_is_none():
     assert vd.Single("Sangan", "MRD").filtered_article_page is None
 
