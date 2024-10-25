@@ -30,17 +30,13 @@ class Single:
         return f"{self.name} ({self.set})"
 
     @property
-    def url(self):
-        return self.article_page
-
-    @property
     def filtered_article_page(self):
         if self.article_page is None:
-            return self.article_page
+            return None
 
         language_filter = f"language={self.language.cardmarket_id}"
         filters = [language_filter]
-        if self.condition != "PO":
+        if self.condition is not Condition.POOR:
             condition_filter = f"minCondition={self.condition.cardmarket_id}"
             filters.append(condition_filter)
         if self.signed is True:
@@ -52,5 +48,4 @@ class Single:
         if self.altered is True:
             altered_filter = "isAltered=Y"
             filters.append(altered_filter)
-
         return self.article_page + f"?{"&".join(filters)}"
