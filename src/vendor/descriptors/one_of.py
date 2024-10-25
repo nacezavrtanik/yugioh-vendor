@@ -9,10 +9,10 @@ class OneOf:
 
     def __set__(self, obj, value):
         if value is None:
-            setattr(obj, self.private_name, None)
+            obj.__dict__[self.private_name] = value
         else:
             enum_instance = self.str_enum(value)
-            setattr(obj, self.private_name, enum_instance)
+            obj.__dict__[self.private_name] = enum_instance
 
     def __get__(self, obj, obj_type):
         if obj is None:

@@ -1,4 +1,5 @@
 
+import dataclasses
 import pytest
 import vendor as vd
 
@@ -113,6 +114,31 @@ def test_instantiation_fails_for_invalid_rare_color():
 def test_instantiation_fails_for_non_string_article_page():
     with pytest.raises(TypeError):
         vd.Single("uraby", "lob", article_page=False)
+
+
+@pytest.mark.parametrize(("attr", "value"), [
+    ("name", "Snatcher of Shapes"),
+    ("set", "LOB"),
+    ("language", "english"),
+    ("condition", vd.Condition.MINT),
+    ("first_edition", False),
+    ("version", 2),
+    ("rarity", vd.Rarity.GHOST_RARE),
+    ("rare_color", "green"),
+    ("language_code", "-en"),
+    ("article_page", "https://www.example.com"),
+])
+def test_instances_are_immutable(attr, value):
+    single = vd.Single(
+        name="Shapesnatch",
+        set="PGD",
+        language=vd.Language.SPANISH,
+        condition=vd.Condition.POOR,
+        first_edition=True,
+        version=None,
+    )
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        setattr(single, attr, value)
 
 
 def test_filtered_article_page_when_article_page_is_none():

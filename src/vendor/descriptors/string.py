@@ -6,7 +6,7 @@ class String():
     def __set__(self, obj, value):
         if not isinstance(value, str):
             raise TypeError
-        setattr(obj, self.private_name, value)
+        obj.__dict__[self.private_name] = value
 
     def __get__(self, obj, objtype):
         return getattr(obj, self.private_name)
@@ -25,7 +25,7 @@ class StringOrNone:
     def __set__(self, obj, value):
         if (value is not None) and (not isinstance(value, str)):
             raise TypeError
-        setattr(obj, self.private_name, value)
+        obj.__dict__[self.private_name] = value
 
     def __get__(self, obj, objtype):
         if obj is None:

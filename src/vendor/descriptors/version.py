@@ -26,7 +26,7 @@ class Version:
             )
         if value is not None and value <= 0:
             raise ValueError("version must be positive")
-        setattr(single, self.private_name, value)
+        single.__dict__[self.private_name] = value
 
     def __get__(self, single, obj_type):
         if single is None:

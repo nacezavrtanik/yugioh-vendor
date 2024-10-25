@@ -6,7 +6,7 @@ class Bool():
     def __set__(self, obj, value):
         if not isinstance(value, bool):
             raise TypeError
-        setattr(obj, self.private_name, value)
+        obj.__dict__[self.private_name] = value
 
     def __get__(self, obj, objtype):
         return getattr(obj, self.private_name, self.default)

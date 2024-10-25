@@ -9,7 +9,7 @@ from vendor.descriptors import (
 )
 
 
-@dataclass
+@dataclass(frozen=True)
 class Single:
     name: String = String()
     set: UpperString = UpperString()
