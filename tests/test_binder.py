@@ -224,3 +224,27 @@ def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
 
     with pytest.raises(CSVProcessingError):
         vd.Binder.from_csv(file)
+
+
+def test_mutable_sequence_operations():
+    ojama_black = vd.Single("ojama black", "DCR")
+    ojama_green = vd.Single("ojama green", "DCR")
+    ojama_yellow = vd.Single("ojama yellow", "DCR")
+
+    binder = vd.Binder([ojama_black, ojama_green])
+    assert ojama_green in binder
+
+    binder.append(ojama_yellow)
+    assert binder[-1] == ojama_yellow
+
+    assert binder.pop() == ojama_yellow
+
+    binder_2 = vd.Binder([ojama_yellow])
+    binder_2.extend(binder)
+    assert len(binder_2) == 3
+
+    del binder_2[1]
+    assert binder_2 == vd.Binder([ojama_yellow, ojama_green])
+
+    binder_2.reverse()
+    assert  binder_2 == vd.Binder([ojama_green, ojama_yellow])

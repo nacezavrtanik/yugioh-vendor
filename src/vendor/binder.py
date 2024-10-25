@@ -1,4 +1,5 @@
 
+import collections
 import csv
 from vendor.single import Single
 from vendor.enums import CSVField
@@ -55,9 +56,34 @@ def _validate(iterable):
             )
 
 
-class Binder(list):
-    def __init__(self, iterable):
-        super().__init__(_validate(iterable))
+class Binder(collections.abc.MutableSequence):
+    def __init__(self, singles):
+        self.singles = list(_validate(singles))
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return type(self)(self.singles[index])
+        return self.singles[index]
+
+    def __setitem__(self, index, value):
+        self.singles[index] = value
+
+    def __delitem__(self, index):
+        del self.singles[index]
+
+    def __len__(self):
+        return len(self.singles)
+
+    def insert(self, index, value):
+        self.singles.insert(index, value)
+
+    def __eq__(self, other):
+        if not isinstance(other, Binder):
+            return NotImplemented
+        return self.singles == other.singles
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.singles!r})"
 
     @classmethod
     def create_csv_template(cls, filepath):
