@@ -1,6 +1,5 @@
 
 from dataclasses import dataclass, KW_ONLY
-from vendor.article import Article
 from vendor.enums import (
     Language, Condition, Rarity, RareColor, LanguageCode
 )
@@ -24,7 +23,6 @@ class Single:
     rare_color: OneOf = OneOf(RareColor, default=None)
     language_code: OneOf = OneOf(LanguageCode, default=None)
     article_page: StringOrNone = StringOrNone(default=None)
-    articles: list[Article] = None
 
     def __repr__(self):
         # We want the repr to eval into an instance equal to self.
