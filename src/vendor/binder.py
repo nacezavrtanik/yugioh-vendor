@@ -2,6 +2,7 @@
 import collections
 import csv
 from vendor.single import Single
+from vendor.descriptors import IterableOfType
 from vendor.enums import CSVField
 from vendor.exceptions import CSVProcessingError
 
@@ -45,20 +46,11 @@ def _process(dict_reader):
             yield processed_row
 
 
-def _validate(iterable):
-    for item in iterable:
-        if isinstance(item, Single):
-            yield item
-        else:
-            raise TypeError(
-                "direct instantiation of Binder requires "
-                "iterable of Single objects"
-            )
-
-
 class Binder(collections.abc.MutableSequence):
+    singles = IterableOfType(Single)
+
     def __init__(self, singles):
-        self.singles = list(_validate(singles))
+        self.singles = singles
 
     def __getitem__(self, index):
         if isinstance(index, slice):
@@ -66,6 +58,8 @@ class Binder(collections.abc.MutableSequence):
         return self.singles[index]
 
     def __setitem__(self, index, value):
+        if not isinstance(value, Single):
+            raise TypeError
         self.singles[index] = value
 
     def __delitem__(self, index):
@@ -75,6 +69,8 @@ class Binder(collections.abc.MutableSequence):
         return len(self.singles)
 
     def insert(self, index, value):
+        if not isinstance(value, Single):
+            raise TypeError
         self.singles.insert(index, value)
 
     def __eq__(self, other):

@@ -15,7 +15,13 @@ def test_instatiation_succeeds_for_iterable_of_singles():
     vd.Binder(single for single in singles)
 
 
-def test_instantiation_fails_for_list_of_non_singles():
+def test_instantiation_fails_for_non_interable():
+    non_iterable = vd.Single("Mokey Mokey King", "RDS")
+    with pytest.raises(TypeError):
+        vd.Binder(non_iterable)
+
+
+def test_instantiation_fails_for_iterable_of_non_singles():
     non_singles = [
         vd.Single("Ryu-Kishin", "LOB"),
         ("Aqua Madoor", "LOB"),
