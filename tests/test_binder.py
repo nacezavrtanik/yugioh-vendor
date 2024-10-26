@@ -236,7 +236,6 @@ def test_mutable_sequence_operations():
 
     binder.append(ojama_yellow)
     assert binder[-1] == ojama_yellow
-
     assert binder.pop() == ojama_yellow
 
     binder_2 = vd.Binder([ojama_yellow])
@@ -248,3 +247,13 @@ def test_mutable_sequence_operations():
 
     binder_2.reverse()
     assert  binder_2 == vd.Binder([ojama_green, ojama_yellow])
+
+
+def test_addition():
+    mystic_tomato = vd.Single("Mystic Tomato", "MRL")
+    mother_grizzly = vd.Single("Mother Grizzly", "MRL")
+    shining_angel = vd.Single("Shining Angel", "MRL")
+    binder_1 = vd.Binder([mystic_tomato])
+    binder_2 = vd.Binder([mother_grizzly, shining_angel])
+    binder_sum = vd.Binder([mystic_tomato, mother_grizzly, shining_angel])
+    assert binder_1 + binder_2 == binder_sum

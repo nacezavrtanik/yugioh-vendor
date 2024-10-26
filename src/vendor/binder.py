@@ -82,6 +82,11 @@ class Binder(collections.abc.MutableSequence):
             return NotImplemented
         return self.singles == other.singles
 
+    def __add__(self, other):
+        if not isinstance(other, Binder):
+            return NotImplemented
+        return type(self)(self.singles + other.singles)
+
     def __repr__(self):
         return f"{self.__class__.__name__}({self.singles!r})"
 
