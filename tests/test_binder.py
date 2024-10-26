@@ -227,9 +227,9 @@ def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
 
 
 def test_mutable_sequence_operations():
-    ojama_black = vd.Single("ojama black", "DCR")
-    ojama_green = vd.Single("ojama green", "DCR")
-    ojama_yellow = vd.Single("ojama yellow", "DCR")
+    ojama_black = vd.Single("ojama black", "IOC")
+    ojama_green = vd.Single("ojama green", "IOC")
+    ojama_yellow = vd.Single("ojama yellow", "IOC")
 
     binder = vd.Binder([ojama_black, ojama_green])
     assert ojama_green in binder
@@ -247,6 +247,47 @@ def test_mutable_sequence_operations():
 
     binder_2.reverse()
     assert  binder_2 == vd.Binder([ojama_green, ojama_yellow])
+
+    binder_2.clear()
+    assert len(binder_2) == 0
+
+
+def test_repr_eval_for_length_0():
+    binder = vd.Binder([])
+    from vendor import Binder
+    assert eval(repr(binder)) == binder
+
+
+def test_repr_eval_for_length_1():
+    binder = vd.Binder([
+        vd.Single("mystical space typhoon", "mrl", version=None, rarity="UR"),
+    ])
+    from vendor import Single, Binder
+    assert eval(repr(binder)) == binder
+
+
+def test_repr_eval_for_length_greater_than_or_equal_to_2_and_less_than_6():
+    binder = vd.Binder([
+        vd.Single("mystical space typhoon", "mrl", version=None, rarity="UR"),
+        vd.Single("black pendant", "mrl", version=2, rarity=None),
+        vd.Single("malevolent nuzzler", "mrl", language_code="-EN"),
+    ])
+    from vendor import Single, Binder
+    assert eval(repr(binder)) == binder
+
+
+def test_repr_eval_for_length_greater_than_or_equal_to_6():
+    binder = vd.Binder([
+        vd.Single("mystical space typhoon", "mrl", version=None, rarity="UR"),
+        vd.Single("black pendant", "mrl", version=2, rarity=None),
+        vd.Single("malevolent nuzzler", "mrl", language_code="-EN"),
+        vd.Single("mystical space typhoon", "mrl", version=None, rarity="UR"),
+        vd.Single("black pendant", "mrl", version=2, rarity=None),
+        vd.Single("malevolent nuzzler", "mrl", language_code="-EN"),
+    ])
+    from vendor import Single, Binder
+    assert eval(repr(binder)) != binder
+    assert eval(repr(binder)) == binder[:2] + binder[-2:]
 
 
 def test_addition():

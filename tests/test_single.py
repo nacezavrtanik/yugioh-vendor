@@ -159,6 +159,24 @@ def test_equality():
     assert single_1 == single_2
 
 
+def test_repr_evaluation():
+    single = vd.Single(
+        "dark armed dragon",
+        "ptdn",
+        language=vd.Language.SPANISH,
+        condition="ex",
+        first_edition=False,
+        signed=True,
+        altered=False,
+        version=None,
+        rarity=vd.Rarity.SECRET_RARE,
+        rare_color=None,
+        article_page=None,
+    )
+    from vendor import Single
+    assert eval(repr(single)) == single
+
+
 def test_filtered_article_page_when_article_page_is_none():
     assert vd.Single("Sangan", "MRD").filtered_article_page is None
 

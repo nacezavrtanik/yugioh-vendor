@@ -88,7 +88,30 @@ class Binder(collections.abc.MutableSequence):
         return type(self)(self.singles + other.singles)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.singles!r})"
+        cls = self.__class__.__name__
+        size = len(self)
+        indent = 4 * " "
+        if size < 2:
+            repr_string = f"{cls}({self.singles})"
+        elif 2 <= size < 6:
+            singles_string = f",\n{indent}".join(map(repr, self.singles))
+            repr_string = f"{cls}([\n{indent}{singles_string},\n])"
+        if size >= 6:
+            keep = 2
+            omitted = size - 2*keep
+            assert omitted > 1
+            start_chunk = (
+                f"{indent}{self.singles[0]!r},\n"
+                f"{indent}{self.singles[1]!r},\n"
+            )
+            omitted_chunk = f"{indent}# ... omitted {omitted} items ...\n"
+            end_chunk = (
+                f"{indent}{self.singles[-2]!r},\n"
+                f"{indent}{self.singles[-1]!r},\n"
+            )
+            singles_string = start_chunk + omitted_chunk + end_chunk
+            repr_string = f"{cls}([\n{singles_string}])"
+        return repr_string
 
     @classmethod
     def create_csv_template(cls, filepath):

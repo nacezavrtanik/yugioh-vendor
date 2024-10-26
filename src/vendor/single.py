@@ -26,6 +26,30 @@ class Single:
     article_page: StringOrNone = StringOrNone(default=None)
     articles: list[Article] = None
 
+    def __repr__(self):
+        # We want the repr to eval into an instance equal to self.
+        # This requires us to surround values for certain attributes with
+        # quotes, depending on whether they are strings or None.
+        rarity_string = f"{self.rarity}" if self.rarity is None else f"'{self.rarity}'"
+        rare_color_string = f"{self.rare_color}" if self.rare_color is None else f"'{self.rare_color}'"
+        language_code_string = f"{self.language_code}" if self.language_code is None else f"'{self.language_code}'"
+        repr_string = (
+            f"{self.__class__.__name__}("
+            f"name='{self.name}', "
+            f"set='{self.set}', "
+            f"language='{self.language}', "
+            f"condition='{self.condition}', "
+            f"first_edition={self.first_edition}, "
+            f"signed={self.signed}, "
+            f"altered={self.altered}, "
+            f"version={self.version}, "
+            f"rarity={rarity_string}, "
+            f"rare_color={rare_color_string}, "
+            f"language_code={language_code_string}, "
+            f"article_page={self.article_page})"
+        )
+        return repr_string
+
     def __str__(self):
         return f"{self.name} ({self.set})"
 
