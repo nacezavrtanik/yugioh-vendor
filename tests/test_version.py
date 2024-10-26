@@ -1,7 +1,7 @@
 
 import pytest
 from vendor.descriptors import Version
-from fixtures.singles import dl_krebons, mrd_mirror_force
+from fixtures import dl_krebons, mrd_mirror_force
 
 
 def test_instantiation_succeeds_with_integer_value():

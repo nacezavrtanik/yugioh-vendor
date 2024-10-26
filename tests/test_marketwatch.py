@@ -1,7 +1,8 @@
 
 import pytest
-from fixtures.marketwatch import firefox_driver, marketwatch
-from fixtures.singles import core_tatsunoko, lob_dark_magician, dl_krebons
+from fixtures import (
+    firefox_driver, marketwatch, core_tatsunoko, lob_dark_magician, dl_krebons
+)
 
 
 def test_get_search_url_for_single_default_site(marketwatch, core_tatsunoko):
