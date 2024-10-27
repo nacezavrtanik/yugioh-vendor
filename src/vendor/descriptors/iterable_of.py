@@ -2,7 +2,7 @@
 import collections
 
 
-class IterableOfType:
+class IterableOf:
     def __set_name__(self, owner, name):
         self.private_name = "_" + name
 
@@ -21,5 +21,5 @@ class IterableOfType:
     def __get__(self, instance, cls):
         return getattr(instance, self.private_name)
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, type_):
+        self.type = type_

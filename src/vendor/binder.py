@@ -2,7 +2,7 @@
 import collections
 import csv
 from vendor.single import Single
-from vendor.descriptors import IterableOfType
+from vendor.descriptors import IterableOf
 from vendor.enums import CSVField
 from vendor.exceptions import CSVProcessingError
 
@@ -47,7 +47,7 @@ def _process(dict_reader):
 
 
 class Binder(collections.abc.MutableSequence):
-    singles = IterableOfType(Single)
+    singles = IterableOf(Single)
 
     def __init__(self, singles):
         self.singles = singles
