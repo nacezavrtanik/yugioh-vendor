@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass, KW_ONLY
+from dataclasses import dataclass, KW_ONLY, asdict
 from vendor.enums import (
     Language, Condition, Rarity, RareColor, LanguageCode
 )
@@ -69,3 +69,6 @@ class Single:
             altered_filter = "isAltered=Y"
             filters.append(altered_filter)
         return self.article_page + f"?{"&".join(filters)}"
+
+    def to_dict(self):
+       return asdict(self)

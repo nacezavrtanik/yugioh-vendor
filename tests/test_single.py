@@ -228,3 +228,24 @@ def test_filtered_article_page_all_filters():
     )
     expected = "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Stardust-Overdrive/Dark-Rabbit?language=4&minCondition=3&isSigned=Y&isFirstEd=Y&isAltered=Y"
     assert single.filtered_article_page == expected
+
+
+def test_as_dict():
+    single = vd.Single(
+        "rabidragon", "phsw", language=vd.Language.PORTUGUESE, condition="PO"
+    )
+    expected = dict(
+        name="Rabidragon",
+        set="PHSW",
+        language=vd.Language.PORTUGUESE,
+        condition=vd.Condition.POOR,
+        first_edition=False,
+        altered=False,
+        signed=False,
+        version=None,
+        rarity=None,
+        rare_color=None,
+        language_code=None,
+        article_page=None,
+    )
+    assert single.to_dict() == expected
