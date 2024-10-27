@@ -3,9 +3,7 @@ from dataclasses import dataclass, KW_ONLY
 from vendor.enums import (
     Language, Condition, Rarity, RareColor, LanguageCode
 )
-from vendor.descriptors import (
-    Version, OneOf, Bool, String, StringOrNone
-)
+from vendor.descriptors import Version, OneOf, Bool, String
 
 
 @dataclass(frozen=True)
@@ -22,7 +20,7 @@ class Single:
     rarity: OneOf = OneOf(Rarity, default=None)
     rare_color: OneOf = OneOf(RareColor, default=None)
     language_code: OneOf = OneOf(LanguageCode, default=None)
-    article_page: StringOrNone = StringOrNone(default=None)
+    article_page: String = String(allow_none=True, default=None)
 
     def __repr__(self):
         # We want the repr to eval into an instance equal to self.
