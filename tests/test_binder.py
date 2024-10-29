@@ -319,6 +319,37 @@ def test_to_csv(tmpdir):
     assert vd.Binder.from_csv(subdir/filename) == binder
 
 
+def test_to_dict():
+    binder = vd.Binder([
+        vd.Single("mezuki", "dusa", language="en", signed=True, condition="M"),
+        vd.Single("gozuki", "dusa", first_edition=True, rarity="UR"),
+        vd.Single("Tsukuyomi", "DUSA", language_code=vd.LanguageCode.EN),
+    ])
+    expected = {
+        "name": {0: "Mezuki", 1: "Gozuki", 2: "Tsukuyomi"},
+        "set": {0: "DUSA", 1: "DUSA", 2: "DUSA"},
+        "language": {
+            0: vd.Language.ENGLISH,
+            1: vd.Language.ENGLISH,
+            2: vd.Language.ENGLISH,
+        },
+        "condition": {
+            0: vd.Condition.MINT,
+            1: vd.Condition.NEAR_MINT,
+            2: vd.Condition.NEAR_MINT,
+        },
+        "first_edition": {0: False, 1: True, 2: False},
+        "signed": {0: True, 1: False, 2: False},
+        "altered": {0: False, 1: False, 2: False},
+        "version": {0: None, 1: None, 2: None},
+        "rarity": {0: None, 1: vd.Rarity.ULTRA_RARE, 2: None},
+        "rare_color": {0: None, 1: None, 2: None},
+        "language_code": {0: None, 1: None, 2: vd.LanguageCode.EN},
+        "article_page": {0: None, 1: None, 2: None},
+    }
+    assert binder.to_dict() == expected
+
+
 @pytest.mark.skip("not yet implemented")
 def test_from_dict_for_dict_of_dict():
     binder_dict = {

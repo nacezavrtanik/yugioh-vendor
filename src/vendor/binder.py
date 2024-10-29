@@ -125,6 +125,13 @@ class Binder(collections.abc.MutableSequence):
             csv_writer.writeheader()
             csv_writer.writerows(single.to_dict() for single in self)
 
+    def to_dict(self):
+        binder_default_dict = collections.defaultdict(dict)
+        for i, single in enumerate(self):
+            for attribute, value in single.to_dict().items():
+                binder_default_dict[attribute][i] = value
+        return dict(binder_default_dict)
+
     _CSV_TEMPLATE = (
         'name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,language_code,article_page,comment\n'
         'Tatsunoko,CORE,English,NM,no,no,no,,,,,,"This field is completely IGNORED, because only fields in the CSVField enum are used when reading CSVs."\n'
