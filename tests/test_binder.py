@@ -317,3 +317,63 @@ def test_to_csv(tmpdir):
     binder.to_csv(subdir/filename)
     assert filename in os.listdir(subdir)
     assert vd.Binder.from_csv(subdir/filename) == binder
+
+
+@pytest.mark.skip("not yet implemented")
+def test_from_dict_for_dict_of_dict():
+    binder_dict = {
+        "name": {0: "Dandylion", 1: "junk synchron"},
+        "set": {0: "DUSA", 1: "dusa"},
+        "language": {0: vd.Language.SPANISH, 1: "french"},
+        "condition": {1: "excellent"},
+        "first_edition": {0: True, 1: "yes"},
+        "signed": {},
+        "altered": {0: "yes"},
+        "version": {},
+        "rarity": {0: vd.Rarity.ULTRA_RARE, 1: "UR"},
+        # "rare_color": {},  # Some fields may be left unspecified
+        "language_code": {},
+        "article_page": {
+            0: "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-Saga/Dandylion",
+            1: None,
+        },
+    }
+    expected = vd.Binder([
+       vd.Single(
+           "dandylion",
+           "dusa",
+           language="spanish",
+           condition="near mint",
+           first_edition=True,
+           altered=True,
+           rarity="UR",
+           article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-Saga/Dandylion",
+        ),
+        vd.Single(
+            "Junk Synchron",
+            "Dusa",
+            language=vd.Language.FRENCH,
+            condition=vd.Condition.EXCELLENT,
+            first_edition=True,
+            rarity=vd.Rarity.ULTRA_RARE,
+        )
+    ])
+    assert vd.Binder.from_dict(binder_dict) == expected
+
+
+@pytest.mark.skip("not yet implemented")
+def test_from_dict_for_dict_of_sequence():
+    assert False
+
+
+@pytest.mark.skip("not yet implemented")
+def test_pandas_dataframe_from_binder():
+    binder = vd.Binder([
+        vd.Single(
+            "flame swordsman", "mrl", first_edition=True, version=2, rarity="C"
+        ),
+        vd.Single(
+            "hungry burger", "srl", condition=vd.Condition.LIGHT_PLAYED
+        ),
+    ])
+    binder_df = pd.DataFrame(single.to_dict() for single in binder)

@@ -2,7 +2,7 @@
 from enum import StrEnum
 
 
-class CSVField(StrEnum):
+class SingleAttribute(StrEnum):
     NAME = "name"
     SET = "set"
     LANGUAGE = "language"

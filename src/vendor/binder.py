@@ -3,7 +3,7 @@ import collections
 import csv
 from vendor.single import Single
 from vendor.descriptors import IterableOf
-from vendor.enums import CSVField
+from vendor.enums import SingleAttribute
 from vendor.exceptions import CSVProcessingError
 
 
@@ -14,7 +14,7 @@ def _process(dict_reader):
             if value == "":
                 continue
             try:
-                field = CSVField(field)
+                field = SingleAttribute(field)
             except ValueError:
                 continue
 
@@ -92,7 +92,7 @@ class Binder(collections.abc.MutableSequence):
         elif 2 <= size < 6:
             singles_string = f",\n{indent}".join(map(repr, self.singles))
             repr_string = f"{cls}([\n{indent}{singles_string},\n])"
-        if size >= 6:
+        elif size >= 6:
             keep = 2
             omitted = size - 2*keep
             assert omitted > 1
@@ -121,7 +121,7 @@ class Binder(collections.abc.MutableSequence):
 
     def to_csv(self, filepath):
         with open(filepath, "w", encoding="utf-8") as file:
-            csv_writer = csv.DictWriter(file, fieldnames=CSVField)
+            csv_writer = csv.DictWriter(file, fieldnames=SingleAttribute)
             csv_writer.writeheader()
             csv_writer.writerows(single.to_dict() for single in self)
 
