@@ -16,7 +16,10 @@ class String():
             elif default is None and allow_none is True:
                 pass
             else:
-                raise ValueError
+                raise ValueError(
+                    "kwarg 'default' must be a str, "
+                    "or None (requires allow_none=True)"
+                )
         self.predicate = predicate
         self.allow_none = allow_none
         self.default = default
@@ -30,7 +33,10 @@ class String():
         elif value is None and self.allow_none is True:
             pass
         else:
-            raise TypeError
+            raise TypeError(
+                "a value of the String descriptor can only be a string, "
+                "or None (requires allow_none=True)"
+            )
         obj.__dict__[self.private_name] = value
 
     def __get__(self, obj, objtype):

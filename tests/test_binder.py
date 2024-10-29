@@ -2,7 +2,6 @@
 import os
 import pytest
 import vendor as vd
-from vendor.exceptions import CSVProcessingError
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
@@ -208,27 +207,39 @@ def test_instantiation_from_csv_fails_for_missing_posargs(tmpdir):
         vd.Binder.from_csv(file)
 
 
-def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
+def test_instantiation_from_csv_fails_for_invalid_string_value(tmpdir):
     content = (
         "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,language_code,article_page\n"
-        "Tatsunoko,,English,NM,True,,,Version 2,,,,\n"
+        "Tatsunoko,CORE,English,NOT A VALID CONDITION,True,,,2,,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    with pytest.raises(CSVProcessingError):
+    with pytest.raises(ValueError):
+        vd.Binder.from_csv(file)
+
+
+def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
+    content = (
+        "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,language_code,article_page\n"
+        "Tatsunoko,Core,English,NM,True,,,Version 2,,,,\n"
+    )
+    file = tmpdir.mkdir("sub").join("tmp.csv")
+    file.write(content)
+
+    with pytest.raises(ValueError):
         vd.Binder.from_csv(file)
 
 
 def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
     content = (
         "name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,language_code,article_page\n"
-        "Tatsunoko,,English,NM,,,nope,,,,,\n"
+        "Tatsunoko,core,English,NM,,,nope,,,,,\n"
     )
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    with pytest.raises(CSVProcessingError):
+    with pytest.raises(ValueError):
         vd.Binder.from_csv(file)
 
 
@@ -351,7 +362,7 @@ def test_to_dict():
 
 
 @pytest.mark.skip("not yet implemented")
-def test_from_dict_for_dict_of_dict():
+def test_from_dict_for_dict_of_dicts():
     binder_dict = {
         "name": {0: "Dandylion", 1: "junk synchron"},
         "set": {0: "DUSA", 1: "dusa"},
@@ -392,9 +403,112 @@ def test_from_dict_for_dict_of_dict():
     assert vd.Binder.from_dict(binder_dict) == expected
 
 
-@pytest.mark.skip("not yet implemented")
-def test_from_dict_for_dict_of_sequence():
-    assert False
+def test_from_dict_for_dict_of_lists_succeeds_for_valid_input():
+    binder_dict = {
+        "name": ["Dandylion", "junk synchron"],
+        "set": ["DUSA", "dusa"],
+        "language": [vd.Language.SPANISH, "french"],
+        "condition": [vd.Condition.NEAR_MINT, "excellent"],
+        "first_edition": [True, "yes"],
+        "signed": ["no", "no"],
+        "altered": ["yes", "no"],
+        "version": [None, None],
+        "rarity": [vd.Rarity.ULTRA_RARE, "UR"],
+        # "rare_color": some fields may be left unspecified
+        "language_code": [None, None],
+        "article_page": [
+            "https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-Saga/Dandylion",
+            None,
+        ],
+    }
+    expected = vd.Binder([
+       vd.Single(
+           "dandylion",
+           "dusa",
+           language="spanish",
+           condition="near mint",
+           first_edition=True,
+           altered=True,
+           rarity="UR",
+           article_page="https://www.cardmarket.com/en/YuGiOh/Products/Singles/Duelist-Saga/Dandylion",
+        ),
+        vd.Single(
+            "Junk Synchron",
+            "Dusa",
+            language=vd.Language.FRENCH,
+            condition=vd.Condition.EXCELLENT,
+            first_edition=True,
+            rarity=vd.Rarity.ULTRA_RARE,
+        )
+    ])
+    assert vd.Binder.from_dict(binder_dict) == expected
+
+
+@pytest.mark.parametrize(("kwarg", "error_msg"), [
+    (dict(language=[12, "french"]), "attribute 'language' must be a string"),
+    (dict(altered=[True, 1.7]), "attribute 'altered' must be one of: bool, str"),
+    (dict(version=[None, (2, "ff")]), "attribute 'version' must be one of: int, float, str"),
+])
+def test_from_dict_for_dict_of_lists_fails_for_invalid_input_1(kwarg, error_msg):
+    binder_dict = {
+        "name": ["Dandylion", "junk synchron"],
+        "set": ["DUSA", "dusa"],
+    } | kwarg
+    with pytest.raises(TypeError) as exc_info:
+        vd.Binder.from_dict(binder_dict)
+    assert exc_info.value.args[0] == error_msg
+
+
+@pytest.mark.parametrize(("kwarg", "error_msg"), [
+    (dict(version=[1.1, 2]), "attribute 'version' cannot be a non-int float"),
+    (dict(version=[3, "v1"]), "attribute 'version' cannot be a non-int string"),
+    (dict(signed=["yes", "nope"]), "attribute 'signed', if string, must be one of: 'true', 'yes', 'false', 'no' (case-insensitive)"),
+    # Non-processing related ValueErrors
+    (dict(version=[2, 0]), "attribute 'version' must be a positive int, or None"),
+    (dict(language=["esperanto", "fr"]), "'esperanto' is not a valid Language"),
+])
+def test_from_dict_for_dict_of_lists_fails_for_invalid_input_2(kwarg, error_msg):
+    binder_dict = {
+        "name": ["Dandylion", "junk synchron"],
+        "set": ["DUSA", "dusa"],
+    } | kwarg
+    with pytest.raises(ValueError) as exc_info:
+        vd.Binder.from_dict(binder_dict)
+    assert exc_info.value.args[0] == error_msg
+
+
+def test_from_dict_for_dict_of_lists_fails_for_mixed_iterables():
+    binder_dict = {
+        "name": ["Dandylion", "junk synchron"],
+        "set": ["DUSA", "dusa"],
+        "language": ["english", "french"],
+        "condition": [vd.Condition.NEAR_MINT, "excellent"],
+        "first_edition": [True, "yes"],
+        "signed": ["no", "no"],
+        "altered": ["yes", "no"],
+        "version": {0: None, 1: None},
+    }
+    with pytest.raises(ValueError) as exc_info:
+        vd.Binder.from_dict(binder_dict)
+    expected_msg = "all dictionary values must be of the same type (supported: dict, list)"
+    assert exc_info.value.args[0] == expected_msg
+
+
+def test_from_dict_for_dict_of_lists_fails_for_inconsistent_list_lengths():
+    binder_dict = {
+        "name": ["Dandylion", "junk synchron"],
+        "set": ["DUSA", "dusa"],
+        "language": ["english", "french"],
+        "condition": [vd.Condition.NEAR_MINT, "excellent"],
+        "first_edition": [True, "yes"],
+        "signed": ["no", "no"],
+        "altered": ["yes", "no"],
+        "version": [None],
+    }
+    with pytest.raises(ValueError) as exc_info:
+        vd.Binder.from_dict(binder_dict)
+    expected_msg = "all lists must be of the same length"
+    assert exc_info.value.args[0] == expected_msg
 
 
 @pytest.mark.skip("not yet implemented")

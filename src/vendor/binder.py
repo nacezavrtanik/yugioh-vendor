@@ -4,46 +4,92 @@ import csv
 from vendor.single import Single
 from vendor.descriptors import IterableOf
 from vendor.enums import SingleAttribute
-from vendor.exceptions import CSVProcessingError
 
 
-def _process(dict_reader):
-    for row in dict_reader:
-        processed_row = {}
-        for field, value in row.items():
-            if value == "":
+def _process(iter_of_dicts):
+    for dictionary in iter_of_dicts:
+        processed_dict = {}
+        for attr, value in dictionary.items():
+            if value in ["", None]:
                 continue
             try:
-                field = SingleAttribute(field)
+                attr = SingleAttribute(attr)
             except ValueError:
                 continue
 
-            if field.is_string:
+            if attr.is_string:
+                if not isinstance(value, str):
+                    raise TypeError(
+                        f"attribute '{attr}' must be a string"
+                    )
                 processed_value = value
-            elif field.is_integer:
-                try:
-                    processed_value = int(value)
-                except ValueError:
-                    csv_error = CSVProcessingError(
-                        f"invalid value '{value}' for field '{field}'; "
-                        f"must be integer or empty",
-                    )
-                    raise csv_error from None
-            elif field.is_boolean:
-                if value.lower() in ["true", "yes"]:
-                    processed_value = True
-                elif value.lower() in ["false", "no"]:
-                    processed_value = False
-                else:
-                    csv_error = CSVProcessingError(
-                        f"invalid value '{value}' for field '{field}'; "
-                        f"must be 'true', 'yes', 'no', 'false', or empty",
-                    )
-                    raise csv_error from None
-            processed_row[field] = processed_value
 
-        if processed_row:
-            yield processed_row
+            elif attr.is_integer:
+                if isinstance(value, int):
+                    processed_value = value
+                elif isinstance(value, float):
+                    if not value.is_integer():
+                        raise ValueError(
+                            f"attribute '{attr}' cannot be a non-int float"
+                        )
+                    processed_value = int(value)
+                elif isinstance(value, str):
+                    try:
+                        processed_value = int(value)
+                    except ValueError:
+                        raise ValueError(
+                            f"attribute '{attr}' cannot be a non-int string"
+                        ) from None
+                else:
+                    raise TypeError(
+                        f"attribute '{attr}' must be one of: int, float, str"
+                    )
+
+            elif attr.is_boolean:
+                if isinstance(value, bool):
+                    processed_value = value
+                elif isinstance(value, str):
+                    if value.lower() in ["true", "yes"]:
+                        processed_value = True
+                    elif value.lower() in ["false", "no"]:
+                        processed_value = False
+                    else:
+                        raise ValueError(
+                            f"attribute '{attr}', if string, must be one of: "
+                            f"'true', 'yes', 'false', 'no' (case-insensitive)"
+                        )
+                else:
+                    raise TypeError(
+                        f"attribute '{attr}' must be one of: bool, str"
+                    )
+
+            processed_dict[attr] = processed_value
+
+        if processed_dict:
+            yield processed_dict
+
+
+def _validate(iterable, *, type_):
+    list_len = None
+    for item in iterable:
+        if not isinstance(item, type_):
+            # A TypeError would be more appropriate here. We choose to raise
+            # a ValueError directly, so we don't have to catch the TypeError
+            # and reraise it as a ValueError later on in Binder.from_dict.
+            # This enables us to raise the error we actually want without
+            # having to exhaust the iterators for error catching.
+            raise ValueError(
+                "all dictionary values must be of the same type "
+                "(supported: dict, list)"
+            )
+        if type_ is list:
+            length = len(item)
+            list_len = list_len or length
+            if list_len != length:
+                raise ValueError(
+                    "all lists must be of the same length"
+                )
+        yield item
 
 
 class Binder(collections.abc.MutableSequence):
@@ -124,6 +170,24 @@ class Binder(collections.abc.MutableSequence):
             csv_writer = csv.DictWriter(file, fieldnames=SingleAttribute)
             csv_writer.writeheader()
             csv_writer.writerows(single.to_dict() for single in self)
+
+    @classmethod
+    def from_dict(cls, dictionary):
+        first_value = next(iter(dictionary.values()))
+        if isinstance(first_value, dict):
+            print("TODO: dict of dict")
+            return cls([])
+
+        elif isinstance(first_value, list):
+            attributes = list(dictionary.keys())
+            validated_values = _validate(dictionary.values(), type_=list)
+            values_collection = zip(*(values for values in validated_values))
+            kwargs_collection = (
+                dict(zip(attributes, values)) for values in values_collection
+            )
+            return cls(
+                Single(**kwargs) for kwargs in _process(kwargs_collection)
+            )
 
     def to_dict(self):
         binder_default_dict = collections.defaultdict(dict)

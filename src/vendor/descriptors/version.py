@@ -25,7 +25,9 @@ class Version:
                 f"expected type 'int' or None, got '{type(value)}' instead"
             )
         if value is not None and value <= 0:
-            raise ValueError("version must be positive")
+            raise ValueError(
+                "attribute 'version' must be a positive int, or None"
+            )
         single.__dict__[self.private_name] = value
 
     def __get__(self, single, obj_type):
