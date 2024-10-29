@@ -10,11 +10,6 @@ def test_each_csv_field_has_exactly_one_specified_type():
     ])
 
 
-def test__csv_field_as_arg():
-    assert vd.CSVField.SET.as_arg() == "set"
-    assert vd.CSVField.FIRST_EDITION.as_arg() == "first_edition"
-
-
 @pytest.mark.parametrize(("string", "enum_instance"), [
     ("english", vd.Language.ENGLISH),
     ("fr", vd.Language.FRENCH),

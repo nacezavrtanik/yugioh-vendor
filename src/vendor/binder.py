@@ -10,11 +10,11 @@ from vendor.exceptions import CSVProcessingError
 def _process(dict_reader):
     for row in dict_reader:
         processed_row = {}
-        for key, value in row.items():
+        for field, value in row.items():
             if value == "":
                 continue
             try:
-                field = CSVField(key)
+                field = CSVField(field)
             except ValueError:
                 continue
 
@@ -30,17 +30,17 @@ def _process(dict_reader):
                     )
                     raise csv_error from None
             elif field.is_boolean:
-                if value.lower() == "yes":
+                if value.lower() in ["true", "yes"]:
                     processed_value = True
-                elif value.lower() == "no":
+                elif value.lower() in ["false", "no"]:
                     processed_value = False
                 else:
                     csv_error = CSVProcessingError(
                         f"invalid value '{value}' for field '{field}'; "
-                        f"must be 'yes', 'no', or empty",
+                        f"must be 'true', 'yes', 'no', 'false', or empty",
                     )
                     raise csv_error from None
-            processed_row[field.as_arg()] = processed_value
+            processed_row[field] = processed_value
 
         if processed_row:
             yield processed_row
@@ -120,10 +120,13 @@ class Binder(collections.abc.MutableSequence):
             return cls(Single(**row) for row in _process(csv.DictReader(file)))
 
     def to_csv(self, filepath):
-        """Save singles in binder to CSV, account for articles."""
+        with open(filepath, "w", encoding="utf-8") as file:
+            csv_writer = csv.DictWriter(file, fieldnames=CSVField)
+            csv_writer.writeheader()
+            csv_writer.writerows(single.to_dict() for single in self)
 
     _CSV_TEMPLATE = (
-        'Name,Set,Language,Condition,First Edition,Signed,Altered,Version,Rarity,Rare Color,Language Code,Article Page,Comment\n'
+        'name,set,language,condition,first_edition,signed,altered,version,rarity,rare_color,language_code,article_page,comment\n'
         'Tatsunoko,CORE,English,NM,no,no,no,,,,,,"This field is completely IGNORED, because only fields in the CSVField enum are used when reading CSVs."\n'
         'Tatsunoko,CORE,English,NM,no,no,no,,,,,,"If you have more copies of the same card, add a ROW FOR EACH. This is a second Tatsunoko, see?"\n'
         'TATSUNOKO,core,english,nm,NO,NO,No,,,,,,"All field values are CASE-INSENSITIVE, so this third Tatsunoko is the same as the previous two."\n'

@@ -3,18 +3,18 @@ from enum import StrEnum
 
 
 class CSVField(StrEnum):
-    NAME = "Name"
-    SET = "Set"
-    LANGUAGE = "Language"
-    CONDITION = "Condition"
-    FIRST_EDITION = "First Edition"
-    SIGNED = "Signed"
-    ALTERED = "Altered"
-    VERSION = "Version"
-    RARITY = "Rarity"
-    RARE_COLOR = "Rare Color"
-    LANGUAGE_CODE = "Language Code"
-    ARTICLE_PAGE = "Article Page"
+    NAME = "name"
+    SET = "set"
+    LANGUAGE = "language"
+    CONDITION = "condition"
+    FIRST_EDITION = "first_edition"
+    SIGNED = "signed"
+    ALTERED = "altered"
+    VERSION = "version"
+    RARITY = "rarity"
+    RARE_COLOR = "rare_color"
+    LANGUAGE_CODE = "language_code"
+    ARTICLE_PAGE = "article_page"
 
     @property
     def is_string(self):
@@ -36,9 +36,6 @@ class CSVField(StrEnum):
     @property
     def is_boolean(self):
         return self in [self.FIRST_EDITION, self.SIGNED, self.ALTERED]
-
-    def as_arg(self):
-        return self.lower().replace(" ", "_")
 
 
 class AliasedStrEnum(StrEnum):
