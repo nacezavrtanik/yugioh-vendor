@@ -5,7 +5,6 @@ from selenium.common.exceptions import NoSuchElementException
 from vendor.article import Article
 from vendor.price import Price
 from vendor.binder import Binder
-from vendor.exceptions import ArticlePageNotFoundError
 
 
 class Marketwatch:

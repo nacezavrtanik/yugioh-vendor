@@ -4,6 +4,9 @@ import csv
 from vendor.single import Single
 from vendor.descriptors import IterableOf
 from vendor.enums import SingleAttribute
+from vendor.exceptions import (
+    DictFormatError, ProcessingError, CSVProcessingError, DictProcessingError
+)
 
 
 def _process(iter_of_dicts):
@@ -19,7 +22,7 @@ def _process(iter_of_dicts):
 
             if attr.is_string:
                 if not isinstance(value, str):
-                    raise TypeError(
+                    raise ProcessingError(
                         f"attribute '{attr}' must be a string"
                     )
                 processed_value = value
@@ -29,7 +32,7 @@ def _process(iter_of_dicts):
                     processed_value = value
                 elif isinstance(value, float):
                     if not value.is_integer():
-                        raise ValueError(
+                        raise ProcessingError(
                             f"attribute '{attr}' cannot be a non-int float"
                         )
                     processed_value = int(value)
@@ -37,11 +40,11 @@ def _process(iter_of_dicts):
                     try:
                         processed_value = int(value)
                     except ValueError:
-                        raise ValueError(
+                        raise ProcessingError(
                             f"attribute '{attr}' cannot be a non-int string"
                         ) from None
                 else:
-                    raise TypeError(
+                    raise ProcessingError(
                         f"attribute '{attr}' must be one of: int, float, str"
                     )
 
@@ -54,12 +57,12 @@ def _process(iter_of_dicts):
                     elif value.lower() in ["false", "no"]:
                         processed_value = False
                     else:
-                        raise ValueError(
+                        raise ProcessingError(
                             f"attribute '{attr}', if string, must be one of: "
                             f"'true', 'yes', 'false', 'no' (case-insensitive)"
                         )
                 else:
-                    raise TypeError(
+                    raise ProcessingError(
                         f"attribute '{attr}' must be one of: bool, str"
                     )
 
@@ -73,12 +76,7 @@ def _validate(iterable, *, type_):
     list_len = None
     for item in iterable:
         if not isinstance(item, type_):
-            # A TypeError would be more appropriate here. We choose to raise
-            # a ValueError directly, so we don't have to catch the TypeError
-            # and reraise it as a ValueError later on in Binder.from_dict.
-            # This enables us to raise the error we actually want without
-            # having to exhaust the iterators for error catching.
-            raise ValueError(
+            raise DictFormatError(
                 "all dictionary values must be of the same type "
                 "(supported: dict, list)"
             )
@@ -86,8 +84,8 @@ def _validate(iterable, *, type_):
             length = len(item)
             list_len = list_len or length
             if list_len != length:
-                raise ValueError(
-                    "all lists must be of the same length"
+                raise DictFormatError(
+                    "for a dict of lists, all lists must have equal length"
                 )
         yield item
 
@@ -163,7 +161,14 @@ class Binder(collections.abc.MutableSequence):
     @classmethod
     def from_csv(cls, filepath):
         with open(filepath, "r", newline="") as file:
-            return cls(Single(**row) for row in _process(csv.DictReader(file)))
+            try:
+                binder = cls(
+                    Single(**row) for row in _process(csv.DictReader(file))
+                )
+            except ProcessingError as pe:
+                assert pe.args
+                raise CSVProcessingError(pe.args[0]) from None
+        return binder
 
     def to_csv(self, filepath):
         with open(filepath, "w", encoding="utf-8") as file:
@@ -185,9 +190,14 @@ class Binder(collections.abc.MutableSequence):
             kwargs_collection = (
                 dict(zip(attributes, values)) for values in values_collection
             )
-            return cls(
-                Single(**kwargs) for kwargs in _process(kwargs_collection)
-            )
+            try:
+                binder = cls(
+                    Single(**kwargs) for kwargs in _process(kwargs_collection)
+                )
+            except ProcessingError as pe:
+                assert pe.args
+                raise DictProcessingError(pe.args[0]) from None
+            return binder
 
     def to_dict(self):
         binder_default_dict = collections.defaultdict(dict)

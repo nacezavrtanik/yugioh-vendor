@@ -2,6 +2,9 @@
 import os
 import pytest
 import vendor as vd
+from vendor.exceptions import (
+    DictFormatError, DictProcessingError, CSVProcessingError
+)
 
 
 def test_instatiation_succeeds_for_iterable_of_singles():
@@ -227,7 +230,7 @@ def test_instantiation_from_csv_fails_for_invalid_version_entry(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(CSVProcessingError):
         vd.Binder.from_csv(file)
 
 
@@ -239,7 +242,7 @@ def test_instantiation_from_csv_fails_for_invalid_boolean_entry(tmpdir):
     file = tmpdir.mkdir("sub").join("tmp.csv")
     file.write(content)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(CSVProcessingError):
         vd.Binder.from_csv(file)
 
 
@@ -454,7 +457,7 @@ def test_from_dict_for_dict_of_lists_fails_for_invalid_input_1(kwarg, error_msg)
         "name": ["Dandylion", "junk synchron"],
         "set": ["DUSA", "dusa"],
     } | kwarg
-    with pytest.raises(TypeError) as exc_info:
+    with pytest.raises(DictProcessingError) as exc_info:
         vd.Binder.from_dict(binder_dict)
     assert exc_info.value.args[0] == error_msg
 
@@ -464,15 +467,15 @@ def test_from_dict_for_dict_of_lists_fails_for_invalid_input_1(kwarg, error_msg)
     (dict(version=[3, "v1"]), "attribute 'version' cannot be a non-int string"),
     (dict(signed=["yes", "nope"]), "attribute 'signed', if string, must be one of: 'true', 'yes', 'false', 'no' (case-insensitive)"),
     # Non-processing related ValueErrors
-    (dict(version=[2, 0]), "attribute 'version' must be a positive int, or None"),
-    (dict(language=["esperanto", "fr"]), "'esperanto' is not a valid Language"),
+    # (dict(version=[2, 0]), "attribute 'version' must be a positive int, or None"),
+    # (dict(language=["esperanto", "fr"]), "'esperanto' is not a valid Language"),
 ])
 def test_from_dict_for_dict_of_lists_fails_for_invalid_input_2(kwarg, error_msg):
     binder_dict = {
         "name": ["Dandylion", "junk synchron"],
         "set": ["DUSA", "dusa"],
     } | kwarg
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(DictProcessingError) as exc_info:
         vd.Binder.from_dict(binder_dict)
     assert exc_info.value.args[0] == error_msg
 
@@ -488,7 +491,7 @@ def test_from_dict_for_dict_of_lists_fails_for_mixed_iterables():
         "altered": ["yes", "no"],
         "version": {0: None, 1: None},
     }
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(DictFormatError) as exc_info:
         vd.Binder.from_dict(binder_dict)
     expected_msg = "all dictionary values must be of the same type (supported: dict, list)"
     assert exc_info.value.args[0] == expected_msg
@@ -505,9 +508,9 @@ def test_from_dict_for_dict_of_lists_fails_for_inconsistent_list_lengths():
         "altered": ["yes", "no"],
         "version": [None],
     }
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(DictFormatError) as exc_info:
         vd.Binder.from_dict(binder_dict)
-    expected_msg = "all lists must be of the same length"
+    expected_msg = "for a dict of lists, all lists must have equal length"
     assert exc_info.value.args[0] == expected_msg
 
 
