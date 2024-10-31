@@ -51,15 +51,6 @@ def test_assignment_fails_for_non_int():
         instance.version = "1"
 
 
-@pytest.mark.parametrize("version_number", [0, -1])
-def test_assignment_fails_for_non_positive_int(version_number):
-    class C:
-        version = Version()
-    instance = C()
-    with pytest.raises(ValueError):
-        instance.version = version_number
-
-
 def test_set_is_duelist_league_is_true(dl_krebons):
     version = Version()
     assert version._set_is_duelist_league(dl_krebons) is True

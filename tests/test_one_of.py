@@ -23,7 +23,7 @@ def test_instantiation_works_for_none_value():
         B = "b"
         C = "c"
     class C:
-        letter = OneOf(Letter, default=Letter.A)
+        letter = OneOf(Letter, allow_none=True, default=Letter.A)
         def __init__(self, letter):
             self.letter = letter
     instance = C(None)
@@ -36,7 +36,7 @@ def test_one_of_works_for_multiple_attribute_assignments():
         B = "b"
         C = "c"
     class C:
-        letter = OneOf(Letter, default=Letter.A)
+        letter = OneOf(Letter, allow_none=True, default=Letter.A)
     instance = C()
     assert instance.letter is Letter.A
     instance.letter = None

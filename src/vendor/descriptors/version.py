@@ -22,11 +22,8 @@ class Version:
     def __set__(self, single, value):
         if (value is not None) and (not isinstance(value, int)):
             raise TypeError(
-                f"expected type 'int' or None, got '{type(value)}' instead"
-            )
-        if value is not None and value <= 0:
-            raise ValueError(
-                "attribute 'version' must be a positive int, or None"
+                f"attribute 'version' must be of type 'int', or None, "
+                f"got type '{type(value).__name__}' instead"
             )
         single.__dict__[self.private_name] = value
 

@@ -135,27 +135,27 @@ class Condition(AliasedStrEnum):
 
 
 class Rarity(AliasedStrEnum):
-    COMMON = "C"
-    RARE = "R"
-    SUPER_RARE = "SR"
-    ULTRA_RARE = "UR"
-    ULTIMATE_RARE = "UtR"
-    SECRET_RARE = "ScR"
-    STARLIGHT_RARE = "SLR"
-    GHOST_RARE = "GR"
+    COMMON = "Common"
+    RARE = "Rare"
+    SUPER_RARE = "Super Rare"
+    ULTRA_RARE = "Ultra Rare"
+    ULTIMATE_RARE = "Ultimate Rare"
+    SECRET_RARE = "Secret Rare"
+    STARLIGHT_RARE = "Starlight Rare"
+    GHOST_RARE = "Ghost Rare"
     SPECIAL = "Special"
 
     @classmethod
     def _get_aliases(cls):
         return {
-            cls.COMMON: ["common"],
-            cls.RARE: ["rare"],
-            cls.SUPER_RARE: ["super rare"],
-            cls.ULTRA_RARE: ["ultra rare"],
-            cls.ULTIMATE_RARE: ["ultimate rare"],
-            cls.SECRET_RARE: ["secret rare"],
-            cls.STARLIGHT_RARE: ["starlight rare"],
-            cls.GHOST_RARE: ["ghost rare"],
+            cls.COMMON: ["c"],
+            cls.RARE: ["r"],
+            cls.SUPER_RARE: ["sr"],
+            cls.ULTRA_RARE: ["ur"],
+            cls.ULTIMATE_RARE: ["utr"],
+            cls.SECRET_RARE: ["scr"],
+            cls.STARLIGHT_RARE: ["slr"],
+            cls.GHOST_RARE: ["gr"],
         }
 
 

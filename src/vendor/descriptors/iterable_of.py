@@ -3,6 +3,9 @@ import collections
 
 
 class IterableOf:
+    def __init__(self, type_):
+        self.type = type_
+
     def __set_name__(self, owner, name):
         self.private_name = "_" + name
 
@@ -20,6 +23,3 @@ class IterableOf:
 
     def __get__(self, instance, cls):
         return getattr(instance, self.private_name)
-
-    def __init__(self, type_):
-        self.type = type_

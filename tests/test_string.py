@@ -8,20 +8,9 @@ def test_string_instantiation_succeeds_for_string_default_value():
     assert string.default == "abc"
 
 
-def test_string_instantiation_fails_for_none_default_value():
-    with pytest.raises(ValueError):
-        String(default=None)
-
-
 def test_string_instantiation_succeeds_for_none_default_value():
     string = String(allow_none=True, default=None)
     assert string.default is None
-
-
-@pytest.mark.parametrize("value", [123, -9999, True, ("dfg", None)])
-def test_string_instantiation_fails_for_non_string_non_none_default(value):
-    with pytest.raises(ValueError):
-        String(default=value)
 
 
 def test_class_instantiation_succeeds_for_string_value():

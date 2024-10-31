@@ -17,18 +17,16 @@ class Single:
     signed: Bool = Bool(default=False)
     altered: Bool = Bool(default=False)
     version: Version = Version()
-    rarity: OneOf = OneOf(Rarity, default=None)
-    rare_color: OneOf = OneOf(RareColor, default=None)
-    language_code: OneOf = OneOf(LanguageCode, default=None)
+    rarity: OneOf = OneOf(Rarity, allow_none=True, default=None)
+    rare_color: OneOf = OneOf(RareColor, allow_none=True, default=None)
+    language_code: OneOf = OneOf(LanguageCode, allow_none=True, default=None)
     article_page: String = String(allow_none=True, default=None)
 
     def __repr__(self):
-        # We want the repr to eval into an instance equal to self.
-        # This requires us to surround values for certain attributes with
-        # quotes, depending on whether they are strings or None.
         rarity_string = f"{self.rarity}" if self.rarity is None else f"'{self.rarity}'"
         rare_color_string = f"{self.rare_color}" if self.rare_color is None else f"'{self.rare_color}'"
         language_code_string = f"{self.language_code}" if self.language_code is None else f"'{self.language_code}'"
+        article_page_string = f"{self.article_page}" if self.article_page is None else f"'{self.article_page}'"
         repr_string = (
             f"{self.__class__.__name__}("
             f"name='{self.name}', "
@@ -42,7 +40,7 @@ class Single:
             f"rarity={rarity_string}, "
             f"rare_color={rare_color_string}, "
             f"language_code={language_code_string}, "
-            f"article_page={self.article_page})"
+            f"article_page={article_page_string})"
         )
         return repr_string
 
