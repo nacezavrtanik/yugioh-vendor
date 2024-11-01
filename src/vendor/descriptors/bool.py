@@ -11,7 +11,7 @@ class Bool():
     def __set__(self, obj, value):
         if not isinstance(value, bool):
             raise TypeError(
-                f"attribute '{self.public_name}' must be of type 'bool', "
+                f"argument '{self.public_name}' must be of type 'bool', "
                 f"got type '{type(value).__name__}' instead"
             )
         obj.__dict__[self.private_name] = value

@@ -3,9 +3,13 @@ import collections
 import csv
 from vendor.single import Single
 from vendor.descriptors import IterableOf
-from vendor.enums import SingleAttribute
+from vendor.enums import Field
 from vendor.exceptions import (
-    DictFormatError, ProcessingError, CSVProcessingError, DictProcessingError
+    CSVFormatError,
+    DictFormatError,
+    ProcessingError,
+    CSVProcessingError,
+    DictProcessingError,
 )
 
 
@@ -40,43 +44,35 @@ _CSV_TEMPLATE = (
 def _process(iter_of_dicts):
     for dictionary in iter_of_dicts:
         processed_dict = {}
-        for attr, value in dictionary.items():
+        for key, value in dictionary.items():
             if value in ["", None]:
                 continue
             try:
-                attr = SingleAttribute(attr)
+                field = Field(key)
             except ValueError:
                 continue
 
-            if attr.is_string:
-                if not isinstance(value, str):
-                    raise ProcessingError(
-                        f"attribute '{attr}' must be a string"
-                    )
-                processed_value = value
+            if field.is_string:
+                if isinstance(value, str):
+                    processed_value = value
+                else:
+                    raise ProcessingError.for_field_type(str, field, value)
 
-            elif attr.is_integer:
+            elif field.is_integer:
                 if isinstance(value, int):
                     processed_value = value
                 elif isinstance(value, float):
                     if not value.is_integer():
-                        raise ProcessingError(
-                            f"attribute '{attr}' cannot be a non-int float"
-                        )
+                        raise ProcessingError.for_field_type(int, field, value)
                     processed_value = int(value)
                 elif isinstance(value, str):
-                    try:
-                        processed_value = int(value)
-                    except ValueError:
-                        raise ProcessingError(
-                            f"attribute '{attr}' cannot be a non-int string"
-                        ) from None
+                    if not value.isdigit():
+                        raise ProcessingError.for_field_type(int, field, value)
+                    processed_value = int(value)
                 else:
-                    raise ProcessingError(
-                        f"attribute '{attr}' must be one of: int, float, str"
-                    )
+                    raise ProcessingError.for_field_type(int, field, value)
 
-            elif attr.is_boolean:
+            elif field.is_boolean:
                 if isinstance(value, bool):
                     processed_value = value
                 elif isinstance(value, str):
@@ -85,16 +81,11 @@ def _process(iter_of_dicts):
                     elif value.lower() in ["false", "no"]:
                         processed_value = False
                     else:
-                        raise ProcessingError(
-                            f"attribute '{attr}', if string, must be one of: "
-                            f"'true', 'yes', 'false', 'no' (case-insensitive)"
-                        )
+                        raise ProcessingError.for_field_type(bool, field, value)
                 else:
-                    raise ProcessingError(
-                        f"attribute '{attr}' must be one of: bool, str"
-                    )
+                    raise ProcessingError.for_field_type(bool, field, value)
 
-            processed_dict[attr] = processed_value
+            processed_dict[field] = processed_value
 
         if processed_dict:
             yield processed_dict
@@ -189,18 +180,36 @@ class Binder(collections.abc.MutableSequence):
     @classmethod
     def from_csv(cls, filepath):
         with open(filepath, "r", newline="") as file:
-            try:
-                binder = cls(
-                    Single(**row) for row in _process(csv.DictReader(file))
+            reader = csv.DictReader(file)
+
+            field_count = collections.Counter(reader.fieldnames)
+            duplicate_fields = [
+                field for field, count in field_count.items() if count > 1
+            ]
+            if duplicate_fields:
+                raise CSVFormatError.for_duplicate_fields(
+                    reader.fieldnames, duplicate_fields
                 )
+
+            missing_required_fields = [
+                field for field in Field.get_required()
+                if field not in reader.fieldnames
+            ]
+            if missing_required_fields:
+                raise CSVFormatError.for_missing_required_fields(
+                    reader.fieldnames, missing_required_fields
+                )
+
+            try:
+                binder = cls(Single(**row) for row in _process(reader))
             except ProcessingError as pe:
-                assert pe.args
-                raise CSVProcessingError(pe.args[0]) from None
+                raise CSVProcessingError.from_processing_error(pe) from None
+
         return binder
 
     def to_csv(self, filepath):
         with open(filepath, "w", encoding="utf-8") as file:
-            csv_writer = csv.DictWriter(file, fieldnames=SingleAttribute)
+            csv_writer = csv.DictWriter(file, fieldnames=Field)
             csv_writer.writeheader()
             csv_writer.writerows(single.to_dict() for single in self)
 
@@ -223,8 +232,7 @@ class Binder(collections.abc.MutableSequence):
                     Single(**kwargs) for kwargs in _process(kwargs_collection)
                 )
             except ProcessingError as pe:
-                assert pe.args
-                raise DictProcessingError(pe.args[0]) from None
+                raise DictProcessingError.from_processing_error(pe) from None
             return binder
 
     def to_dict(self):

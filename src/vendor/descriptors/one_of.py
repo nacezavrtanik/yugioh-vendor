@@ -25,12 +25,12 @@ class OneOf:
             pass
         else:
             msg = (
-                f"attribute '{self.public_name}' must be of type 'str', "
+                f"argument '{self.public_name}' must be of type 'str', "
                 f"got type '{type(value).__name__}' instead"
             )
             if self.allow_none is True:
                 msg = (
-                    f"attribute '{self.public_name}' must be of type 'str', "
+                    f"argument '{self.public_name}' must be of type 'str', "
                     f"or None, got type '{type(value).__name__}' instead"
                 )
             raise TypeError(msg)

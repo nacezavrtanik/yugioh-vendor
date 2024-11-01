@@ -3,10 +3,10 @@ import pytest
 import vendor as vd
 
 
-def test_each_single_attribute_has_exactly_one_specified_type():
+def test_each_field_has_exactly_one_specified_type():
     assert all([
         sum([field.is_string, field.is_integer, field.is_boolean]) == 1
-        for field in vd.SingleAttribute
+        for field in vd.Field
     ])
 
 

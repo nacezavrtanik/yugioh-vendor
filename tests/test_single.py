@@ -133,7 +133,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single(["Uraby"], "LOB")
         expected_msg = (
-            "attribute 'name' must be of type 'str', "
+            "argument 'name' must be of type 'str', "
             "got type 'list' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -142,7 +142,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single(None, "LOB")
         expected_msg = (
-            "attribute 'name' must be of type 'str', "
+            "argument 'name' must be of type 'str', "
             "got type 'NoneType' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -151,7 +151,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", ("LOB",))
         expected_msg = (
-            "attribute 'set' must be of type 'str', "
+            "argument 'set' must be of type 'str', "
             "got type 'tuple' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -160,7 +160,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", None)
         expected_msg = (
-            "attribute 'set' must be of type 'str', "
+            "argument 'set' must be of type 'str', "
             "got type 'NoneType' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -169,7 +169,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", language=12)
         expected_msg = (
-            "attribute 'language' must be of type 'str', "
+            "argument 'language' must be of type 'str', "
             "got type 'int' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -178,7 +178,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", language=None)
         expected_msg = (
-            "attribute 'language' must be of type 'str', "
+            "argument 'language' must be of type 'str', "
             "got type 'NoneType' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -193,7 +193,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", condition=False)
         expected_msg = (
-            "attribute 'condition' must be of type 'str', "
+            "argument 'condition' must be of type 'str', "
             "got type 'bool' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -202,7 +202,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", condition=None)
         expected_msg = (
-            "attribute 'condition' must be of type 'str', "
+            "argument 'condition' must be of type 'str', "
             "got type 'NoneType' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -217,7 +217,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", first_edition="true")
         expected_msg = (
-            "attribute 'first_edition' must be of type 'bool', "
+            "argument 'first_edition' must be of type 'bool', "
             "got type 'str' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -226,7 +226,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", signed=0)
         expected_msg = (
-            "attribute 'signed' must be of type 'bool', "
+            "argument 'signed' must be of type 'bool', "
             "got type 'int' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -235,7 +235,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("Uraby", "LOB", altered=None)
         expected_msg = (
-            "attribute 'altered' must be of type 'bool', "
+            "argument 'altered' must be of type 'bool', "
             "got type 'NoneType' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -244,7 +244,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("uraby", "lob", version="1")
         expected_msg = (
-            "attribute 'version' must be of type 'int', or None, "
+            "argument 'version' must be of type 'int', or None, "
             "got type 'str' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -259,7 +259,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("uraby", "lob", rarity=False)
         expected_msg = (
-            "attribute 'rarity' must be of type 'str', or None, "
+            "argument 'rarity' must be of type 'str', or None, "
             "got type 'bool' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -282,7 +282,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("uraby", "lob", rare_color=[])
         expected_msg = (
-            "attribute 'rare_color' must be of type 'str', or None, "
+            "argument 'rare_color' must be of type 'str', or None, "
             "got type 'list' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -303,7 +303,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("uraby", "lob", language_code=False)
         expected_msg = (
-            "attribute 'language_code' must be of type 'str', or None, "
+            "argument 'language_code' must be of type 'str', or None, "
             "got type 'bool' instead"
         )
         assert exc_info.value.args[0] == expected_msg
@@ -324,7 +324,7 @@ class TestInstantiationErrors:
         with pytest.raises(TypeError) as exc_info:
             vd.Single("uraby", "lob", article_page=False)
         expected_msg = (
-            "attribute 'article_page' must be of type 'str', or None, "
+            "argument 'article_page' must be of type 'str', or None, "
             "got type 'bool' instead"
         )
         assert exc_info.value.args[0] == expected_msg

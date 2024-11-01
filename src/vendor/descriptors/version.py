@@ -20,9 +20,13 @@ class Version:
         self.private_name = "_" + name
 
     def __set__(self, single, value):
-        if (value is not None) and (not isinstance(value, int)):
+        if value is None:
+            pass
+        elif isinstance(value, int):
+            value = int(value)  # Convert any booleans into 'pure' ints
+        else:
             raise TypeError(
-                f"attribute 'version' must be of type 'int', or None, "
+                f"argument 'version' must be of type 'int', or None, "
                 f"got type '{type(value).__name__}' instead"
             )
         single.__dict__[self.private_name] = value

@@ -2,7 +2,7 @@
 from enum import StrEnum
 
 
-class SingleAttribute(StrEnum):
+class Field(StrEnum):
     NAME = "name"
     SET = "set"
     LANGUAGE = "language"
@@ -15,6 +15,10 @@ class SingleAttribute(StrEnum):
     RARE_COLOR = "rare_color"
     LANGUAGE_CODE = "language_code"
     ARTICLE_PAGE = "article_page"
+
+    @classmethod
+    def get_required(cls):
+        return [cls.NAME, cls.SET]
 
     @property
     def is_string(self):
