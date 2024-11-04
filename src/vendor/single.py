@@ -23,24 +23,20 @@ class Single:
     article_page: String = String(allow_none=True, default=None)
 
     def __repr__(self):
-        rarity_string = f"{self.rarity}" if self.rarity is None else f"'{self.rarity}'"
-        rare_color_string = f"{self.rare_color}" if self.rare_color is None else f"'{self.rare_color}'"
-        language_code_string = f"{self.language_code}" if self.language_code is None else f"'{self.language_code}'"
-        article_page_string = f"{self.article_page}" if self.article_page is None else f"'{self.article_page}'"
         repr_string = (
             f"{self.__class__.__name__}("
-            f"name='{self.name}', "
-            f"set='{self.set}', "
-            f"language='{self.language}', "
-            f"condition='{self.condition}', "
-            f"first_edition={self.first_edition}, "
-            f"signed={self.signed}, "
-            f"altered={self.altered}, "
-            f"version={self.version}, "
-            f"rarity={rarity_string}, "
-            f"rare_color={rare_color_string}, "
-            f"language_code={language_code_string}, "
-            f"article_page={article_page_string})"
+            f"name={self.name!r}, "
+            f"set={self.set!r}, "
+            f"language={str(self.language)!r}, "
+            f"condition={str(self.condition)!r}, "
+            f"first_edition={self.first_edition!r}, "
+            f"signed={self.signed!r}, "
+            f"altered={self.altered!r}, "
+            f"version={self.version!r}, "
+            f"rarity={str(self.rarity or "") or None!r}, "
+            f"rare_color={str(self.rare_color or "") or None!r}, "
+            f"language_code={str(self.language_code or "") or None!r}, "
+            f"article_page={str(self.article_page or "") or None!r})"
         )
         return repr_string
 
